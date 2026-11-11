@@ -10,6 +10,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Contract, JsonRpcProvider, Wallet } from "ethers";
 import { FUJI, VEGA_REGISTRY_ABI, VEGA_REGISTRY_ADDRESS, hashRecord, txUrl, type HashedMeasurement } from "@vega/shared";
 import { mergeMeasurements, mergePublishedMeasurements, type PublishedMeasurement } from "./outputs.js";
+import { selectMeasurements } from "./selection.js";
 
 const ROOT = new URL("../../", import.meta.url);
 const PUBLISHED_URL = new URL("sample-data/published.json", ROOT);
@@ -30,7 +31,9 @@ for (const r of records) {
   const { dataHash, ...rest } = r;
   if (hashRecord(rest) !== dataHash) throw new Error(`Hash inválido en ${r.sceneId}`);
 }
-console.log(`${records.length} registros válidos en ${file}`);
+const selectedRecords = selectMeasurements(records, process.argv.slice(2));
+if (selectedRecords.length === 0) throw new Error("Los filtros no seleccionaron ninguna medición");
+console.log(`${records.length} registros válidos; ${selectedRecords.length} seleccionados en ${file}`);
 if (dryRun) process.exit(0);
 
 // 2. Publicar
@@ -45,7 +48,7 @@ const registry = new Contract(address, VEGA_REGISTRY_ABI, wallet);
 const previousPublished = readArray<PublishedMeasurement>(PUBLISHED_URL);
 const previousRecords = readArray<HashedMeasurement>(RECORDS_URL);
 const published: PublishedMeasurement[] = [];
-for (const r of records) {
+for (const r of selectedRecords) {
   if (await registry.isRecorded(r.dataHash)) {
     console.log(`= ya sellado ${r.sceneId}`);
     continue; // idempotente: se puede re-ejecutar sin duplicar
@@ -57,7 +60,7 @@ for (const r of records) {
 }
 
 const allPublished = mergePublishedMeasurements(previousPublished, published);
-const allRecords = mergeMeasurements(previousRecords, records);
+const allRecords = mergeMeasurements(previousRecords, selectedRecords);
 mkdirSync(new URL("frontend/public/", ROOT), { recursive: true });
 writeFileSync(PUBLISHED_URL, JSON.stringify(allPublished, null, 2) + "\n");
 writeFileSync(RECORDS_URL, JSON.stringify(allRecords, null, 2) + "\n");

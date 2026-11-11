@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsx --env-file-if-exists=../.env src/index.ts",
     "dry": "tsx --env-file-if-exists=../.env src/index.ts --dry-run",
-    "test": "tsx --test test/outputs.test.ts",
+    "test": "tsx --test test/outputs.test.ts test/selection.test.ts",
     "typecheck": "tsc -p ."
   },
   "dependencies": {
