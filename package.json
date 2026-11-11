@@ -1,0 +1,19 @@
+{
+  "name": "vega",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Datos satelitales del agua de la Puna sellados en Avalanche",
+  "workspaces": ["shared", "processing", "relayer", "frontend"],
+  "scripts": {
+    "mock": "npm run gen-mock -w @vega/shared",
+    "dev:front": "npm run dev -w @vega/frontend",
+    "ndwi": "npm run start -w @vega/processing",
+    "relay": "npm run start -w @vega/relayer",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

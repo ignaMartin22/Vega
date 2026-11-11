@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "name": "vega-wetlands",
+  "_nota": "POLÍGONOS DE EJEMPLO (cuadrados aproximados). Integrante 2 los reemplaza por los humedales reales dibujados en geojson.io + Copernicus Browser. Mantener wetlandId 1..3 y thresholdNdwi en sync con contracts/script/Deploy.s.sol",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "wetlandId": 1, "name": "Humedal 1 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1500 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-67.10, -25.40], [-67.08, -25.40], [-67.08, -25.38], [-67.10, -25.38], [-67.10, -25.40]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "wetlandId": 2, "name": "Humedal 2 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1000 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-67.05, -25.45], [-67.03, -25.45], [-67.03, -25.43], [-67.05, -25.43], [-67.05, -25.45]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "wetlandId": 3, "name": "Humedal 3 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1200 },
+      "geometry": { "type": "Polygon", "coordinates": [[[-67.00, -25.35], [-66.98, -25.35], [-66.98, -25.33], [-67.00, -25.33], [-67.00, -25.35]]] }
+    }
+  ]
+}

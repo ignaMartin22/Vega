@@ -119,10 +119,37 @@ Punto de partida: el contrato de ejemplo `ThresholdAlert` de la guía del track.
 
 ---
 
+## 🗂️ Estructura del repo y equipo
+
+```
+contracts/    Solidity + Foundry: VegaRegistry, tests y deploy              → I1 Contratos
+processing/   Sentinel-2 (STAC) → NDWI → registros hasheados                → I2 Datos
+relayer/      sella las mediciones en Fuji con ethers.js                    → I3 Relayer + Infra
+frontend/     React + Vite + Leaflet + Chart.js, botón "Verificar"          → I4 Frontend
+shared/       tipos, hash canónico, ABI y dirección del deploy (de todos)
+sample-data/  humedales GeoJSON, mediciones mock/reales, respuestas de APIs
+docs/         reparto de roles, interfaces y roadmap por integrante
+```
+
+- **Reparto de tareas y línea de tiempo:** [`docs/ROLES.md`](docs/ROLES.md)
+- **Interfaces congeladas entre módulos:** [`docs/INTERFACES.md`](docs/INTERFACES.md)
+- **Roadmap individual:** [`docs/roadmap/`](docs/roadmap/)
+
+```bash
+npm install          # instala todos los workspaces (Node 20+)
+npm run mock         # genera sample-data/measurements.mock.json
+npm run dev:front    # frontend en modo mock → http://localhost:5173
+npm run dry -w @vega/relayer   # valida los hashes sin enviar tx
+npm run typecheck    # antes de cada merge
+cp .env.example .env # variables (PRIVATE_KEY solo de la cuenta del hackathon)
+```
+
+---
+
 ## 🚀 Pasos de desarrollo
 
 ### Día 1 (miércoles 11): setup y contrato
-- [ ] Crear el repo y la estructura: `contracts/`, `relayer/`, `frontend/`, `sample-data/`
+- [x] Crear el repo y la estructura: `contracts/`, `relayer/`, `frontend/`, `sample-data/`
 - [ ] Instalar **Core Wallet**, crear una cuenta solo para el hackathon y agregar la red **Fuji**
 - [ ] Pedir AVAX de prueba en el **faucet de Builder Hub**
 - [ ] Elegir el salar y dibujar los polígonos de 2 o 3 humedales en GeoJSON (geojson.io + Copernicus Browser)
