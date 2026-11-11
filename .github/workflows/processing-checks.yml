@@ -1,0 +1,35 @@
+name: Processing checks
+
+on:
+  push:
+    branches: [feat/processing-configurable-geojson-input]
+    paths:
+      - "processing/**"
+      - "shared/**"
+      - "sample-data/**"
+      - "package-lock.json"
+      - "package.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/processing-checks.yml"
+  pull_request:
+    paths:
+      - "processing/**"
+      - "shared/**"
+      - "sample-data/**"
+      - "package-lock.json"
+      - "package.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/processing-checks.yml"
+
+jobs:
+  processing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck -w @vega/processing
+      - run: npm test -w @vega/processing
