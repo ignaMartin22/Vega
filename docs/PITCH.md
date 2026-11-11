@@ -8,7 +8,6 @@
 
 | Hueco | Quién | Cuándo |
 |---|---|---|
-| `[[SALAR]]`: nombre del salar y de los humedales | I2 | hito H2 |
 | `[[GRAFICO_NDWI]]`: captura de la serie real con el umbral | I2 / I4 | hito H3/H4 |
 | `[[TX_WATERALERT]]`: link a la tx de un `WaterAlert` real | I3 | hito H4 |
 | `[[CAPTURA_MAPA]]`: mapa con polígonos y el botón "Verificar" | I4 | hito H4 |
@@ -69,7 +68,7 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 - Contrato `VegaRegistry` desplegado y **verificado** en Avalanche Fuji: `0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`
 - Código público: https://testnet.snowscan.xyz/address/0xbed76c9b117ec31022ae7f07b0982545c16d1dd5#code
 - Fórmula: **NDWI = (B03 − B08) / (B03 + B08)**, promedio por humedal, con nubes enmascaradas
-- Humedales de `[[SALAR]]` con umbral de alerta propio cada uno
+- Humedales de Salar del Hombre Muerto con umbral de alerta propio cada uno
 
 **Se dice:**
 > "Tomamos la escena satelital, calculamos cuánta agua hay en cada humedal y generamos una huella digital del dato. El relayer la firma y la manda al contrato. Si el agua cae por debajo del umbral, el contrato dispara una alerta que nadie puede borrar."
@@ -101,14 +100,14 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 **Título:** Funciona hoy, con datos reales
 
 **En pantalla:**
-- `[[CAPTURA_MAPA]]`: mapa con los humedales de `[[SALAR]]`
+- `[[CAPTURA_MAPA]]`: mapa con los humedales de Salar del Hombre Muerto
 - `[[GRAFICO_NDWI]]`: serie histórica con la línea de umbral
-- **Alerta real on-chain:** `[[TX_WATERALERT]]`
+- **Alerta pública on-chain:** `[[TX_WATERALERT]]`. Se presenta como prueba de que **el mecanismo funciona** (la alerta queda pública e imborrable), **no** como prueba de daño ambiental ni de su causa. Los umbrales del MVP son provisionales.
 - Botón **"Verificar"**: ✔ coincide con lo registrado en Avalanche. Si se altera el dato: ✘
 - Video completo: `[[VIDEO]]`
 
 **Se dice:**
-> "Esta es la serie real de `[[SALAR]]` en los últimos años. Cada punto es una transacción en Avalanche. Acá el humedal cruzó el umbral y el contrato emitió la alerta: este es el link en el explorer. Y si alguien modifica un valor, la verificación lo detecta en el momento."
+> "Esta es la serie real del Salar del Hombre Muerto entre 2023 y 2025: 105 mediciones de tres humedales. Cada punto es una transacción en Avalanche. Cuando un valor cruzó el umbral, el contrato emitió una alerta pública que nadie puede borrar: este es el link en el explorer. La alerta no dice quién tiene la culpa; dice que hay que mirar ese humedal, y que ese aviso queda a la vista de todos. Y si alguien modifica un valor, la verificación lo detecta en el momento."
 
 ---
 
@@ -158,10 +157,12 @@ Lo muestra a compradores, bancos e inversores → vende y se financia mejor
 - **Próxima etapa:**
   - Varios relayers de distintas partes, con mediana o quórum en el contrato
   - **L1 propia de Avalanche** donde comunidad, universidad y empresa sean los validadores
-  - Más salares, Landsat para series largas, sensores en campo y reportes para auditorías
+  - **Triangulación de fuentes:** sellar también los sensores de la minera (piezómetros, caudales) y mediciones de campo, para contrastarlos públicamente con el satélite
+  - **Validación científica:** umbrales calibrados con hidrólogos y universidades, y alertas por anomalía frente al mismo mes de años anteriores
+  - Más salares, Landsat y Sentinel-1 (radar) para series largas y sin nubes, y reportes para auditorías
 - **Equipo:** `[[EQUIPO]]`
 - **Atribución (obligatoria):**
-  - Contains modified Copernicus Sentinel data 2026, processed by Vega
+  - Contains modified Copernicus Sentinel data 2023-2025, processed by Vega
   - Mapa base: NASA Global Imagery Browse Services (GIBS), parte de NASA ESDIS
   - Acceso a Sentinel-2 vía Earth Search (Element 84) sobre AWS Open Data
   - Cartografía base: Natural Earth (dominio público)
@@ -178,7 +179,10 @@ Lo muestra a compradores, bancos e inversores → vende y se financia mejor
 | ¿Qué impide que el relayer publique datos falsos? | Hoy hay un solo relayer, pero el dato es **reproducible**: escena pública + hash on-chain, así que cualquiera puede auditarlo. El diseño escala a varios relayers con mediana, o a una L1 propia con validadores de cada parte. |
 | ¿Por qué Avalanche? | Transacciones baratas y rápidas en la C-Chain (compatible con EVM), y la posibilidad de una **L1 propia** con validadores elegidos: comunidades, universidad y empresa. Encaja con la gobernanza multiparte. |
 | ¿Y las nubes? | Usamos la capa de clasificación de escena (SCL) de Sentinel-2 para descartar nubes y sombras, y filtramos escenas con poca nubosidad (una por mes). |
-| ¿El NDWI alcanza para medir el agua? | Es un indicador de **superficie con agua** en humedales, no de agua subterránea. Sirve como alerta temprana pública. La siguiente etapa suma sensores en campo y otras fuentes. |
+| ¿El NDWI alcanza para medir el agua? | Es un indicador de **superficie con agua** en humedales, no de agua subterránea ni de volumen, y varía con la estación, las sales y la vegetación. Sirve como **alerta temprana pública**, no como prueba de causa. La siguiente etapa suma sensores en campo y otras fuentes. |
+| ¿Cómo saben que el dato satelital es correcto? | Hay que separar dos cosas. **Integridad:** que nadie alteró el dato. Eso lo garantiza la blockchain. **Exactitud:** que el NDWI refleje el estado real del humedal. Eso depende del método, que es un índice estándar de teledetección, con código abierto y reproducible, y se valida contrastándolo con otros satélites, con verdad de campo y con expertos. **Vega certifica integridad y trazabilidad, no verdad ambiental por sí sola.** |
+| ¿Coincide con lo que miden los sensores de la minera? | No tiene por qué coincidir en números: el satélite ve agua en superficie y los sensores suelen medir agua subterránea y caudales. Son **complementarios**. Próxima etapa: que la minera también selle sus lecturas on-chain. Si los sensores dicen "estable" y el satélite muestra que el humedal se achica, **la discrepancia queda pública**; si coinciden, la minera tiene una prueba más fuerte que cualquier estudio propio. |
+| Entonces, ¿qué es exactamente el "certificado"? | Que **esta medición se hizo con este método, sobre esta imagen pública, en esta fecha, y no fue modificada**. La credibilidad sale de combinar fuentes independientes selladas y comparables, con el satélite como la fuente que no controla nadie. |
 | ¿Cuánto cuesta operar on-chain? | Cada medición consume ≈170.000 de gas: **≈ 0,0013 AVAX en mainnet** (precio del gas de 7,5 gwei, medido el 11/11/2026; varía). Un salar con 3 humedales y una escena por mes son 36 tx al año, **≈ 0,05 AVAX al año**. Incluso midiendo en cada pasada del satélite (~220 tx al año) son ≈ 0,3 AVAX. |
 | ¿Por qué pagaría una minera? | Los compradores (automotrices, fabricantes de baterías) exigen cada vez más debida diligencia ambiental. Un dato que nadie puede manipular le sirve más que un estudio propio. |
 | Si la minera paga, ¿no controla el dato? | No. Puede pagar o dejar de pagar, pero **no puede modificar ni borrar** lo registrado: cada medición queda en la cadena para siempre y cualquiera la puede recalcular desde la imagen pública. Esa es la diferencia con contratar una consultora. |
