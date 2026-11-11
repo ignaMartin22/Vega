@@ -31,9 +31,42 @@ Sin fechas, resuelve los últimos tres años desde la solicitud, divididos en 36
 
 Catálogo: `GET /api/salars?province=salta` y `GET /api/salars/hombre-muerto/wetlands`. `coverage.complete` es `false`: actualmente solo está Hombre Muerto, con provincias Salta y Catamarca. La consulta de Jujuy devuelve catálogo vacío con esa limitación explícita.
 
-Para dibujar, enviar `areas: [GeoJSONFeature]` además de/o en lugar de `wetlandIds`. En este incremento: Polygon sin agujeros, anillo cerrado simple, 3–500 vértices únicos, dentro de la extensión piloto y ventana menor a 100 km². Máximo cinco áreas por solicitud. MultiPolygon y agujeros se rechazan con HTTP 400; todavía no están implementados. La extensión piloto no es una delimitación oficial ni una validación provincial completa.
+Para dibujar dentro del piloto, enviar `areas: [GeoJSONFeature]` además de/o en lugar de `wetlandIds`. Se admite Polygon sin agujeros, anillo cerrado simple, 3–500 vértices y ventana menor a 100 km². Para el Salar del Hombre Muerto se mantiene la restricción a la extensión piloto; no es una delimitación oficial.
 
-Las geometrías dibujadas reciben IDs provisionales persistidos en un registro local, distintos de 1/2/3. Repetir la misma geometría serializada conserva el ID. Una geometría rotada/invertida/reordenada no se normaliza topológicamente en este incremento. Todos los resultados requieren revisión de identidad/umbrales antes de publicación automática. No asignar IDs desde el frontend ni presentar umbral cero como umbral ambiental validado.
+### Importar GeoJSON para otro salar
+
+El endpoint también admite una FeatureCollection GeoJSON para un salar que todavía no figure en el catálogo:
+
+```json
+{
+  "salarId": "salar-prueba-jujuy",
+  "salarName": "Salar de prueba",
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": { "name": "Laguna de prueba" },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [[[-68.10,-25.40],[-68.09,-25.40],[-68.09,-25.39],[-68.10,-25.39],[-68.10,-25.40]]]
+        }
+      }
+    ]
+  }
+}
+```
+
+En esta modalidad:
+- `salarId` es un slug estable elegido por el cliente y `salarName` es el nombre descriptivo. No agrega automáticamente el salar al catálogo público.
+- `geojson` debe ser una FeatureCollection con entre 1 y 5 Features Polygon.
+- Cada polígono debe tener un único anillo exterior cerrado, 3–500 vértices y una ventana inferior a 100 km².
+- Se validan coordenadas WGS84, cierre, área, autointersecciones y límites de tamaño. MultiPolygon y agujeros se rechazan con HTTP 400.
+- Para un salar externo no existe todavía una frontera oficial cargada en el servicio: se acepta la geometría que aporta el usuario, pero **no se certifica que esté dentro del salar nombrado**. Revisar ubicación y límites antes de interpretar resultados.
+- Los humedales importados reciben IDs provisionales persistidos localmente, distintos según salar y geometría. El umbral se inicializa en cero solo como placeholder técnico; no es un umbral ambiental calibrado.
+- Los resultados quedan marcados para revisión. No se publican automáticamente en Avalanche ni deben enviarse al relayer sin acordar identidad, ID y umbral con I1/I3.
+
+Repetir el mismo `salarId` y la misma geometría serializada conserva el ID provisional. Una geometría rotada/invertida/reordenada no se normaliza topológicamente. Máximo cinco áreas por solicitud. Para un salar fuera del catálogo no se aceptan `wetlandIds` del catálogo: se debe enviar GeoJSON.
 
 ## Estado y resultados
 

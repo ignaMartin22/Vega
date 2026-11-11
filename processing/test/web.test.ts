@@ -55,6 +55,33 @@ test("catálogo compartido, dibujo validado e identidad persistente",()=>{
   }finally{rmSync(directory,{recursive:true,force:true});}
 });
 
+test("importa FeatureCollection GeoJSON para salares fuera del catálogo piloto",()=>{
+  const directory=mkdtempSync(join(tmpdir(),"vega-custom-salar-"));
+  try {
+    const feature={
+      type:"Feature",
+      properties:{name:"Laguna de prueba"},
+      geometry:{type:"Polygon",coordinates:[[[-68.10,-25.40],[-68.09,-25.40],[-68.09,-25.39],[-68.10,-25.39],[-68.10,-25.40]]]},
+    };
+    const geojson={type:"FeatureCollection",features:[feature]};
+    const request={salarId:"salar-prueba-jujuy",salarName:"Salar de prueba",geojson};
+    const first=parseRequest(request,new AreaRegistry(directory),now());
+    const second=parseRequest(request,new AreaRegistry(directory),now());
+    assert.equal(first.salarId,"salar-prueba-jujuy");
+    assert.equal(first.salarName,"Salar de prueba");
+    assert.equal(first.areas.length,1);
+    assert.equal(first.areas[0].feature.properties.salar,"Salar de prueba");
+    assert.equal(first.areas[0].identityStatus,"provisional");
+    assert.ok(first.areas[0].feature.properties.wetlandId>=1_000_000_000);
+    assert.equal(first.areas[0].feature.properties.wetlandId,second.areas[0].feature.properties.wetlandId);
+    const other=parseRequest({...request,salarId:"otro-salar",salarName:"Otro salar"},new AreaRegistry(directory),now());
+    assert.notEqual(first.areas[0].feature.properties.wetlandId,other.areas[0].feature.properties.wetlandId);
+    assert.throws(()=>parseRequest({salarId:"salar-sin-nombre",geojson},new AreaRegistry(directory),now()),/salarName/);
+    assert.throws(()=>parseRequest({salarId:"salar-con-id-ajeno",salarName:"Otro",wetlandIds:[1]},new AreaRegistry(directory),now()),/IDs de catálogo/);
+    assert.throws(()=>parseRequest({salarId:"salar-invalido",salarName:"Inválido",geojson:{type:"Feature",features:[]}},new AreaRegistry(directory),now()),/FeatureCollection/);
+  } finally {rmSync(directory,{recursive:true,force:true});}
+});
+
 test("motor parametrizado: medida canónica, PNG vinculado y errores técnicos explícitos",async()=>{
   const directory=mkdtempSync(join(tmpdir(),"vega-engine-"));
   try {
