@@ -2,9 +2,11 @@
 
 ## Estado de integración (11/11/2026)
 
-La landing y el flujo de análisis están integrados en `main` mediante los PR #7 y #8. El contrato de API para GeoJSON personalizado está integrado mediante el PR #6. La verificación de integridad on-chain del frontend está integrada mediante el PR #9; la entrada GeoJSON configurable y la consulta STAC espacial del pipeline CLI, mediante el PR #10.
+La landing y el flujo de análisis están integrados en `main` mediante los PR #7 y #8. El contrato de API para GeoJSON personalizado está integrado mediante el PR #6. La verificación de integridad on-chain del frontend está integrada mediante el PR #9; la entrada GeoJSON configurable y la consulta STAC espacial del pipeline CLI, mediante el PR #10. La actualización documental y el pitch/demo se incorporaron mediante los PR #11 y #12.
 
 Esta documentación describe el estado actual de `main`; no es necesario integrar esos PR nuevamente.
+
+Índice de entrega: [estado integral](PROJECT_STATUS.md) · [pitch y guion de demo](PITCH_DEMO.md).
 
 ## Qué funciona en el repositorio
 
