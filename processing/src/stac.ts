@@ -18,7 +18,9 @@ export async function searchScenes(f: WetlandFeature, from: string, to: string, 
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       collections: ["sentinel-2-l2a"],
-      bbox: bbox(f),
+      // intersects usa la geometría completa: evita escenas que solo tocan el bbox
+      // pero no cubren el humedal.
+      intersects: f.geometry,
       datetime: `${from}/${to}`,
       query: { "eo:cloud_cover": { lt: maxCloud } },
       sortby: [{ field: "properties.datetime", direction: "asc" }],
@@ -27,6 +29,8 @@ export async function searchScenes(f: WetlandFeature, from: string, to: string, 
   });
   if (!res.ok) throw new Error(`STAC ${res.status}: ${await res.text()}`);
   const json = await res.json();
-  // TODO(Datos): paginar con links[rel=next] si hay más de 100 escenas
+  if (!json || !Array.isArray(json.features)) {
+    throw new Error("Respuesta STAC inválida: falta el array features");
+  }
   return json.features;
 }
