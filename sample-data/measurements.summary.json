@@ -1,0 +1,59 @@
+{
+  "count": 105,
+  "byWetland": [
+    {
+      "wetlandId": 1,
+      "name": "Laguna del sector sur (AOI piloto)",
+      "count": 35,
+      "from": "2023-01-20",
+      "to": "2025-12-20",
+      "minNdwi": 0.4893,
+      "maxNdwi": 0.8718,
+      "minValidFraction": 0.7124282594342018,
+      "provisionalThreshold": 0.15,
+      "belowProvisionalThreshold": 0
+    },
+    {
+      "wetlandId": 2,
+      "name": "Laguna del sector central (AOI piloto)",
+      "count": 34,
+      "from": "2023-01-20",
+      "to": "2025-12-02",
+      "minNdwi": -0.0475,
+      "maxNdwi": 0.6911,
+      "minValidFraction": 0.5091845227725839,
+      "provisionalThreshold": 0.1,
+      "belowProvisionalThreshold": 2
+    },
+    {
+      "wetlandId": 3,
+      "name": "Vega fluvial oriental (AOI piloto)",
+      "count": 36,
+      "from": "2023-01-20",
+      "to": "2025-12-20",
+      "minNdwi": -0.2242,
+      "maxNdwi": 0.0158,
+      "minValidFraction": 0.7098548087193892,
+      "provisionalThreshold": 0.12,
+      "belowProvisionalThreshold": 36
+    }
+  ],
+  "missing": [
+    {
+      "wetlandId": 1,
+      "month": "2025-02",
+      "error": "Ninguna escena del mes superó los controles"
+    },
+    {
+      "wetlandId": 2,
+      "month": "2023-12",
+      "error": "Ninguna escena del mes superó los controles"
+    },
+    {
+      "wetlandId": 2,
+      "month": "2024-12",
+      "error": "Ninguna escena del mes superó los controles"
+    }
+  ],
+  "warning": "AOI piloto y umbrales provisionales; NDWI no demuestra causalidad minera"
+}

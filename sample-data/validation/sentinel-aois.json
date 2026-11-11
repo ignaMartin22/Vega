@@ -1,0 +1,16 @@
+{
+  "sceneId": "S2A_19JFM_20240409_0_L2A",
+  "bbox": [
+    689476.4165294718,
+    7178902.199660825,
+    706191.2116074497,
+    7194392.702413661
+  ],
+  "epsg": 32719,
+  "colors": {
+    "1": "rojo",
+    "2": "cian",
+    "3": "amarillo"
+  },
+  "attribution": "Contains modified Copernicus Sentinel data 2024, processed by Vega."
+}
