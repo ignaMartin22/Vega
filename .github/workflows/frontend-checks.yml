@@ -1,0 +1,31 @@
+name: Frontend checks
+
+on:
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "shared/**"
+      - "sample-data/wetlands.geojson"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.base.json"
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck -w @vega/frontend
+      - name: GeoJSON tests
+        run: npm test -w @vega/frontend
+      - name: Build
+        run: npm run build -w @vega/frontend
