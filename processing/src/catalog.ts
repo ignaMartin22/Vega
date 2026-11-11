@@ -32,18 +32,20 @@ function intersects(a: number[], b: number[], c: number[], d: number[]): boolean
   return (cross(a,b,c)*cross(a,b,d)<0 && cross(c,d,a)*cross(c,d,b)<0) || onSegment(a,b,c) || onSegment(a,b,d) || onSegment(c,d,a) || onSegment(c,d,b);
 }
 
-/** Incremento 1 acepta Polygon sin agujeros; rechaza lo no soportado explícitamente. */
-export function validateDrawnArea(raw: unknown): { name: string; geometry: WetlandFeature["geometry"] } {
+/** Valida Polygon simple. Si se pasa un bbox, restringe al salar piloto; null permite AOI externos aportados por el usuario. */
+export function validateDrawnArea(raw: unknown, bounds: [number,number,number,number] | null = salar.bbox): { name: string; geometry: WetlandFeature["geometry"] } {
   const value = raw as { type?: string; properties?: {name?: unknown}; geometry?: {type?: string;coordinates?: unknown} };
   if (!value || value.type!=="Feature" || value.geometry?.type!=="Polygon") throw new InputError("Este incremento acepta Features Polygon; MultiPolygon todavía no está soportado");
   const rings = value.geometry.coordinates;
   if (!Array.isArray(rings) || rings.length!==1 || !Array.isArray(rings[0])) throw new InputError("Este incremento acepta un anillo exterior sin agujeros");
   const ring: unknown[] = rings[0];
   if (ring.length<4 || ring.length>501) throw new InputError("El contorno necesita entre 4 y 501 coordenadas");
-  const [west,south,east,north] = salar.bbox;
+  const [west,south,east,north] = bounds ?? [-180,-90,180,90];
   for (const xy of ring) {
     if (!Array.isArray(xy) || xy.length!==2 || !xy.every((v) => typeof v==="number" && Number.isFinite(v)) ||
-        xy[0]<west || xy[0]>east || xy[1]<south || xy[1]>north) throw new InputError("Coordenadas inválidas o fuera de la extensión piloto del salar");
+        xy[0]<west || xy[0]>east || xy[1]<south || xy[1]>north) {
+      throw new InputError(bounds ? "Coordenadas inválidas o fuera de la extensión piloto del salar" : "Coordenadas fuera del rango WGS84");
+    }
   }
   const points = ring as XY[];
   if (points[0][0]!==points.at(-1)![0] || points[0][1]!==points.at(-1)![1]) throw new InputError("El anillo debe estar cerrado");
@@ -68,6 +70,7 @@ export function validateDrawnArea(raw: unknown): { name: string; geometry: Wetla
 
 export interface AnalysisRequest {
   salarId: string;
+  salarName: string;
   period: Period;
   windows: ReturnType<typeof monthlyWindows>;
   areas: { feature: WetlandFeature; geometryHash: string; identityStatus: "catalog_pilot" | "provisional" }[];
@@ -97,24 +100,53 @@ export class AreaRegistry {
 export function parseRequest(raw: unknown, registry: AreaRegistry, now = new Date()): AnalysisRequest {
   if (!raw || typeof raw!=="object" || Array.isArray(raw)) throw new InputError("La solicitud debe ser un objeto JSON");
   const input=raw as Record<string,unknown>;
-  if (input.salarId!==salar.id) throw new InputError("Salar no disponible todavía en el catálogo piloto");
+  const requestedSalarId=input.salarId;
+  if (typeof requestedSalarId!=="string" || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(requestedSalarId)) {
+    throw new InputError("salarId debe ser un identificador estable en formato slug");
+  }
+  const isPilot=requestedSalarId===salar.id;
+  const requestedSalarName=isPilot ? salar.name : input.salarName;
+  if (typeof requestedSalarName!=="string" || !requestedSalarName.trim() || requestedSalarName.length>120) {
+    throw new InputError("Para un salar fuera del catálogo indicá salarName (máximo 120 caracteres)");
+  }
   if (input.from!==undefined && typeof input.from!=="string" || input.to!==undefined && typeof input.to!=="string") throw new InputError("Fechas inválidas");
   let period: Period;
   try { period=resolvePeriod(input.from as string|undefined,input.to as string|undefined,now); }
   catch (error) { throw new InputError((error as Error).message); }
-  const ids=input.wetlandIds ?? [], drawings=input.areas ?? [];
-  if (!Array.isArray(ids) || !Array.isArray(drawings) || ids.length+drawings.length<1 || ids.length+drawings.length>5) throw new InputError("Elegí entre 1 y 5 áreas");
-  const available=catalogWetlands();
-  const selected: {feature:WetlandFeature;identityStatus:"catalog_pilot"|"provisional"}[]=[];
-  for (const id of ids) {
-    const feature=available.find((w)=>w.properties.wetlandId===id);
-    if (!feature) throw new InputError("Humedal de catálogo desconocido");
-    selected.push({feature,identityStatus:"catalog_pilot"});
+
+  const ids=input.wetlandIds ?? [];
+  let drawings: unknown[]=[];
+  if (input.geojson!==undefined && input.areas!==undefined) throw new InputError("Enviá geojson o areas, no ambos");
+  if (input.geojson!==undefined) {
+    const collection=input.geojson as {type?:unknown;features?:unknown};
+    if (!collection || collection.type!=="FeatureCollection" || !Array.isArray(collection.features)) {
+      throw new InputError("geojson debe ser una FeatureCollection válida");
+    }
+    drawings=collection.features;
+  } else {
+    const supplied=input.areas ?? [];
+    if (!Array.isArray(supplied)) throw new InputError("areas debe ser un array de Features GeoJSON");
+    drawings=supplied;
   }
-  const validated=drawings.map(validateDrawnArea);
+  if (!Array.isArray(ids) || ids.length+drawings.length<1 || ids.length+drawings.length>5) {
+    throw new InputError("Elegí entre 1 y 5 áreas");
+  }
+  if (!isPilot && ids.length) throw new InputError("Los IDs de catálogo solo están disponibles para el Salar del Hombre Muerto; importá GeoJSON para otro salar");
+
+  const selected: {feature:WetlandFeature;identityStatus:"catalog_pilot"|"provisional"}[]=[];
+  if (isPilot) {
+    const available=catalogWetlands();
+    for (const id of ids) {
+      const feature=available.find((w)=>w.properties.wetlandId===id);
+      if (!feature) throw new InputError("Humedal de catálogo desconocido");
+      selected.push({feature,identityStatus:"catalog_pilot"});
+    }
+  }
+  const validated=drawings.map((feature)=>validateDrawnArea(feature,isPilot?salar.bbox:null));
   for (const area of validated) {
-    const hash=createHash("sha256").update(JSON.stringify(area.geometry)).digest("hex");
-    selected.push({feature:{type:"Feature",properties:{wetlandId:registry.id(hash),name:area.name,salar:salar.name,thresholdNdwi:0},geometry:area.geometry},identityStatus:"provisional"});
+    const geometryHash=createHash("sha256").update(JSON.stringify(area.geometry)).digest("hex");
+    const identityKey=createHash("sha256").update(requestedSalarId+":"+geometryHash).digest("hex");
+    selected.push({feature:{type:"Feature",properties:{wetlandId:registry.id(identityKey),name:area.name,salar:requestedSalarName.trim(),thresholdNdwi:0},geometry:area.geometry},identityStatus:"provisional"});
   }
   const seen=new Set<string>();
   const areas: AnalysisRequest["areas"]=[];
@@ -123,5 +155,5 @@ export function parseRequest(raw: unknown, registry: AreaRegistry, now = new Dat
     if (seen.has(geometryHash)) continue;
     seen.add(geometryHash); areas.push({...area,geometryHash});
   }
-  return {salarId:salar.id,period,windows:monthlyWindows(period),areas};
+  return {salarId:requestedSalarId,salarName:requestedSalarName.trim(),period,windows:monthlyWindows(period),areas};
 }
