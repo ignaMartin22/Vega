@@ -121,3 +121,35 @@ Rama: `i2/sdd-sentinel2`. Instrucciones: [`processing/API.md`](../processing/API
 **Demo:** una corrida fría de tres años tardó unos 18 minutos aquí. Prepararla antes y reutilizar el resultado/caché con su fecha visible. `npm run export -w @vega/processing -- <id> <directorio>` genera respaldo offline de registros e imágenes. No presentar una caché como análisis recién ejecutado.
 
 Quedan en sus responsables la integración UI, el despliegue y la publicación. Los límites cartográficos y umbrales ambientales siguen sujetos a revisión; NDWI no demuestra volumen, contaminación ni causalidad minera.
+
+## 🎯 Frontend: estado y checklist para cerrar la demo (relevado 11/11)
+
+**Estado actual:** `npm run build -w @vega/frontend` OK y 4/4 tests. Funciona en modo `mock`. Al relevarlo, el contrato en Fuji tenía **0 mediciones** en los humedales 1, 2 y 3, así que el modo `chain` hoy se ve vacío.
+
+**Ya hecho:** landing completa · mapa Leaflet con los 3 humedales y autoencuadre · gráfico NDWI con línea de umbral · botón Verificar (hash más campos on-chain, con estados ✔/✘/sin registro/error) · panel de análisis GeoJSON contra la API de I2 (`:8787`) con fotogramas Sentinel-2 · `source.ts` con modos `mock` y `chain`.
+
+### Bloqueante (antes que todo)
+- [ ] **I3:** publicar las 105 mediciones reales (`sample-data/measurements.json`) en Fuji y versionar `frontend/public/records.json`. Sin ese archivo, Verificar devuelve "sin registro".
+- [ ] **I3:** pasar a I4 el `txHash` de al menos un `WaterAlert` real (es el `[[TX_WATERALERT]]` del pitch).
+
+### I4 · Mínimo para el video
+- [ ] Probar `VITE_DATA_SOURCE=chain npm run dev:front` contra Fuji con los datos ya publicados.
+- [ ] Panel **"Alertas públicas"**: `registry.queryFilter("WaterAlert", DEPLOY_BLOCK)` (está como TODO en `source.ts`), con fecha, humedal, NDWI, umbral y link a la tx en Snowscan.
+- [ ] Toggle **"simular dato alterado"**: modifica el NDWI off-chain y Verificar debe mostrar ✘.
+- [ ] **Tabla de mediciones**: fecha, NDWI, escena, hash abreviado, link a la tx y Verificar por fila (hoy solo se verifica la última).
+- [ ] Footer con la atribución **"Copernicus Sentinel data 2023-2025"** y la dirección del contrato enlazada a https://testnet.snowscan.xyz/address/0xbed76c9b117ec31022ae7f07b0982545c16d1dd5
+
+### I4 · Importante
+- [ ] En el gráfico, puntos bajo el umbral en rojo.
+- [ ] Estados de carga y error del RPC, con fallback a mock si se cae la red (y un aviso visible de que es mock).
+- [ ] Polígonos coloreados según estado (normal / en alerta); capa satelital (NASA GIBS o Esri World Imagery) en lugar de OSM.
+- [ ] Soportar **MultiPolygon** (el backend ya lo acepta desde `i2/sdd-sentinel2`): tipos en `source.ts` y `analysis-geojson.ts`, y el encuadre en `WetlandMap.tsx`.
+
+### Opcional
+- [ ] Selector de salar del catálogo regional (`GET /api/salars`, `/api/salars/:id/wetlands`) en vez de solo subir GeoJSON.
+- [ ] Reproducción de `salarFrames` (play/pausa), ver `processing/API.md`.
+
+### Deploy y entrega
+- [ ] Deploy en Vercel con `VITE_DATA_SOURCE=chain` (coordinar con I3). El análisis GeoJSON solo funciona si la API de I2 está publicada con HTTPS y CORS (`VITE_ANALYSIS_API_URL`); si no, ocultarlo o marcarlo como "solo local".
+- [ ] Probar desde otro dispositivo o red.
+- [ ] Video demo (1 a 3 min) siguiendo el guion de `docs/roadmap/4-frontend.md`; tener a mano la tx de respaldo.
