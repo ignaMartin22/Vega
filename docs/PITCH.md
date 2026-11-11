@@ -68,7 +68,7 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 - Contrato `VegaRegistry` desplegado y **verificado** en Avalanche Fuji: `0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`
 - Código público: https://testnet.snowscan.xyz/address/0xbed76c9b117ec31022ae7f07b0982545c16d1dd5#code
 - Fórmula: **NDWI = (B03 − B08) / (B03 + B08)**, promedio por humedal, con nubes enmascaradas
-- Humedales de Salar del Hombre Muerto con umbral de alerta propio cada uno
+- Humedales del Salar del Hombre Muerto con umbral de alerta propio cada uno
 
 **Se dice:**
 > "Tomamos la escena satelital, calculamos cuánta agua hay en cada humedal y generamos una huella digital del dato. El relayer la firma y la manda al contrato. Si el agua cae por debajo del umbral, el contrato dispara una alerta que nadie puede borrar."
@@ -100,7 +100,7 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 **Título:** Funciona hoy, con datos reales
 
 **En pantalla:**
-- `[[CAPTURA_MAPA]]`: mapa con los humedales de Salar del Hombre Muerto
+- `[[CAPTURA_MAPA]]`: mapa con los humedales del Salar del Hombre Muerto
 - `[[GRAFICO_NDWI]]`: serie histórica con la línea de umbral
 - **Alerta pública on-chain:** `[[TX_WATERALERT]]`. Se presenta como prueba de que **el mecanismo funciona** (la alerta queda pública e imborrable), **no** como prueba de daño ambiental ni de su causa. Los umbrales del MVP son provisionales.
 - Botón **"Verificar"**: ✔ coincide con lo registrado en Avalanche. Si se altera el dato: ✘
