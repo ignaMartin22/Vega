@@ -1,7 +1,7 @@
 {
-  "address": null,
-  "deployBlock": null,
-  "deployTx": null,
-  "publisher": null,
-  "note": "Completa Contratos tras el deploy en Fuji. Es la única fuente de verdad de la dirección."
+  "address": "0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5",
+  "deployBlock": 60898760,
+  "deployTx": "0xfd51933094923ae2d7803abdc6095015f1083a20586d38a153cc32b026d96897",
+  "publisher": "0x58689003F78836a21792E1b05585398CBae167b6",
+  "note": "VegaRegistry en Fuji. Explorer: https://explorer-test.avax.network/c-chain/address/0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5"
 }
