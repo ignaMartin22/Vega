@@ -38,6 +38,8 @@ Después abrí tu roadmap en [`roadmap/`](roadmap/) y seguí el Día 1. Para ver
 - [I3 · Relayer + Infra](roadmap/3-relayer-infra.md)
 - [I4 · Frontend](roadmap/4-frontend.md)
 
+Avances y próximos pasos: [`AVANCES.md`](AVANCES.md)
+
 ## Línea de tiempo común
 
 | Hito | Cuándo | Qué cambia para los demás |
@@ -65,7 +67,7 @@ Ningún hito **bloquea**: si H1 o H3 se atrasan, los demás siguen con mocks y l
 
 ## Checklist final (responsable)
 
-- [ ] Contrato desplegado + link al explorer en el README (**I1**)
+- [x] Contrato desplegado + link al explorer en el README (**I1**)
 - [ ] Pitch deck 5–7 slides con "por qué blockchain" (**I1**, con aportes de todos)
 - [ ] Atribución de fuentes de datos en README y pitch (**I2**)
 - [ ] `sample-data/` con respuestas reales de cada API (**I2** STAC, **I3** tx/published)

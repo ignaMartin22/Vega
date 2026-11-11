@@ -4,10 +4,12 @@
 **Entregás:** la serie real sellada en Fuji, al menos **un `WaterAlert` real** y la infraestructura de la demo
 **No dependés de nadie:** probás contra un contrato local (Anvil) con los datos mock hasta que existan el contrato en Fuji y los datos reales.
 
+> **Actualización (mié 11/11):** el contrato ya está en Fuji (`0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`). Para empezar a publicar, seguí los pasos de la sección **I3** en [`../AVANCES.md`](../AVANCES.md): crear tu wallet, pasarle la dirección pública a I1 para que la autorice y probar con pocas mediciones.
+
 ## Día 1 · Mié 11
 
 - [ ] `npm install` y `npm run mock`, luego `npm run dry -w @vega/relayer` (valida los 102 hashes mock)
-- [ ] Wallet del relayer: usar la misma cuenta del hackathon que I1 o una nueva (si es nueva, pedirle a I1 `setPublisher`). Pedir AVAX en el faucet
+- [ ] Wallet del relayer: crear una **propia** con `cast wallet new` (no usar la de I1 ni compartir claves), pasarle a I1 solo la dirección pública para que la autorice con `setPublisher` y pedir AVAX en el faucet
 - [ ] **Entorno local sin esperar a I1:** instalar Foundry, `anvil` en una terminal y desplegar `contracts/` localmente (`forge script script/Deploy.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --private-key <clave de anvil>`)
 - [ ] Correr el relayer contra Anvil (`FUJI_RPC_URL=http://127.0.0.1:8545`, `VEGA_REGISTRY_ADDRESS=<local>`) y confirmar que se emite `WaterAlert` en el humedal 2 del mock
 - [ ] Mejorar el relayer:
