@@ -6,7 +6,7 @@
 import { writeFileSync } from "node:fs";
 import { NDWI_METHOD, RECORD_SCHEMA, toScaled, withHash, type HashedMeasurement } from "@vega/shared";
 import { loadWetlands } from "./wetlands.js";
-import { searchScenes } from "./stac.js";
+import { searchScenes, selectBestScenePerMonth } from "./stac.js";
 import { computeNdwi } from "./ndwi.js";
 
 const FROM = "2023-01-01T00:00:00Z";
@@ -14,8 +14,10 @@ const TO = new Date().toISOString();
 
 const out: HashedMeasurement[] = [];
 for (const w of loadWetlands()) {
-  const items = await searchScenes(w, FROM, TO);
-  // TODO(Datos): quedarse con 1 escena por mes (la de menor nubosidad)
+  const scenes = await searchScenes(w, FROM, TO);
+  const items = selectBestScenePerMonth(scenes);
+  console.log(`${w.properties.name}: ${scenes.length} escenas encontradas, ${items.length} seleccionadas (una por mes)`);
+
   for (const item of items) {
     const { ndwi, validPixels } = await computeNdwi(item, w);
     out.push(
