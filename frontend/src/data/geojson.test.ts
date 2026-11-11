@@ -76,6 +76,6 @@ test("rechaza propiedades requeridas ausentes y geometrías no soportadas", () =
   assert.throws(() => parseWetlandsGeoJson(collection(missingName)), /properties.name/);
 
   const multiPolygon = structuredClone(validFeature);
-  (multiPolygon.geometry as { type: string; coordinates: number[][][][] }).type = "MultiPolygon";
+  multiPolygon.geometry.type = "MultiPolygon";
   assert.throws(() => parseWetlandsGeoJson(collection(multiPolygon)), /Polygon/);
 });
