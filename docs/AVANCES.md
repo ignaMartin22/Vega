@@ -34,7 +34,7 @@ Registro de lo terminado y de lo que cada integrante puede hacer a partir de eso
 
 ### Pendiente de I1
 - [ ] Autorizar la wallet del relayer de I3 con `setPublisher` (cuando I3 pase su dirección pública)
-- [ ] Verificar el código del contrato en el explorer (opcional)
+- [x] Código del contrato verificado en el explorer (Routescan/Snowscan): https://testnet.snowscan.xyz/address/0xbed76c9b117ec31022ae7f07b0982545c16d1dd5#code
 - [ ] Ajustar umbrales con `setThreshold` si I2 lo pide (sin redeploy)
 - [ ] Pitch deck y README final
 
