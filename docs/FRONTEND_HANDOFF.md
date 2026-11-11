@@ -1,67 +1,98 @@
-# Entrega del frontend de Vega
+# Entrega y operación del frontend de Vega
 
-## Alcance
+## Estado de integración (11/11/2026)
 
-La landing institucional y la interfaz interactiva viven en `frontend/`. La landing presenta el propósito, las capacidades y el método de Vega; debajo conserva el explorador cartográfico, la importación GeoJSON y el panel de resultados.
+La landing y el flujo de análisis están integrados en `main` mediante los PR #7 y #8. El contrato de API para GeoJSON personalizado está integrado mediante el PR #6. La verificación de integridad on-chain del frontend está integrada mediante el PR #9; la entrada GeoJSON configurable y la consulta STAC espacial del pipeline CLI, mediante el PR #10. La actualización documental y el pitch/demo se incorporaron mediante los PR #11 y #12.
 
-La rama de esta entrega es `feat/frontend-landing-page` y su PR es [#8](https://github.com/ignaMartin22/Vega/pull/8). Este PR está apilado sobre el PR #7, que depende del contrato de API del PR #6. No integrar esta rama directamente sobre `main` sin resolver primero ese orden de dependencias y revisar los PRs correspondientes.
+Esta documentación describe el estado actual de `main`; no es necesario integrar esos PR nuevamente.
+
+Índice de entrega: [estado integral](PROJECT_STATUS.md) · [pitch y guion de demo](PITCH_DEMO.md).
+
+## Qué funciona en el repositorio
+
+- Landing institucional responsive y plataforma interactiva en `frontend/`.
+- Importación de GeoJSON desde la interfaz, validación y envío a `POST /api/analyses`.
+- Seguimiento de trabajos, resultados NDWI, incidencias y fotogramas Sentinel-2.
+- Servicio HTTP local de procesamiento con estado persistido y endpoint de salud.
+- Entrada GeoJSON configurable para el pipeline CLI mediante `WETLANDS_GEOJSON`.
+- Consulta STAC espacial con la geometría completa (`intersects`), paginación y selección mensual.
+- Contrato `VegaRegistry` desplegado en Fuji y botón de verificación de registro/hash/campos.
 
 ## Ejecutar localmente
 
-Requisitos: Node.js 20 o superior y npm.
+Requisitos: Node.js 22 y npm. Desde la raíz del repositorio:
 
-Desde la raíz del repositorio:
+Terminal 1 — servicio de análisis:
 
 ```bash
 npm ci
 npm run serve -w @vega/processing
 ```
 
-En otra terminal, desde la raíz:
+Terminal 2 — frontend:
 
 ```bash
 npm run dev:front
 ```
 
-Vite sirve el frontend normalmente en `http://localhost:5173`; el servicio de análisis local escucha en `http://127.0.0.1:8787`.
+Vite suele escuchar en `http://localhost:5173`; la API local escucha en `http://127.0.0.1:8787`.
 
-Para cambiar la URL del servicio, definir `VITE_ANALYSIS_API_URL` en el entorno de Vite (el proyecto lee el archivo `.env` de la raíz mediante `frontend/vite.config.ts`). No configurar una URL pública hasta tener un backend desplegado, accesible y con CORS habilitado para el dominio del frontend.
+La interfaz usa por defecto `http://127.0.0.1:8787`. Para cambiar el origen, definir `VITE_ANALYSIS_API_URL` en el entorno de Vite o en el `.env` de la raíz (el `vite.config.ts` de frontend configura `envDir: ".."`).
 
-## Construcción y comprobaciones
+Comprobaciones:
 
 ```bash
-npm run typecheck -w @vega/frontend
+npm run typecheck
 npm test -w @vega/frontend
+npm test -w @vega/processing
 npm run build -w @vega/frontend
 ```
 
-El workflow **Frontend checks** también ejecuta estas comprobaciones para el PR. El resultado exitoso del CI no reemplaza una revisión visual en navegador, en móvil y escritorio.
+El CI de los PR integrados ejecutó las comprobaciones correspondientes. Eso no reemplaza la prueba manual del flujo completo en navegador.
 
-## Despliegue: estado y requisitos
+## Fuente de datos y estado de Avalanche
 
-El frontend es una aplicación Vite estática; el servicio de procesamiento no queda desplegado por publicar solamente `frontend/`. La interfaz de análisis usa por defecto `http://127.0.0.1:8787`, que solo funciona en la máquina local. Para una demo remota se necesita:
+- El frontend arranca en modo `mock` si no se configura `VITE_DATA_SOURCE=chain`.
+- En modo `chain`, lee `VegaRegistry` en Fuji y busca el registro off-chain en `VITE_RECORDS_URL` (por defecto `/records.json`).
+- Dirección del contrato: `0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`; red Fuji C-Chain, Chain ID 43113.
+- La serie histórica `sample-data/measurements.json` contiene 105 registros experimentales Sentinel-2 para tres AOI del piloto Hombre Muerto (2023–2025). Su handoff documenta hashes válidos y huecos de cobertura.
+- La existencia de esa serie no demuestra que se haya publicado en Fuji. En el estado revisado no están versionados `sample-data/published.json` ni `frontend/public/records.json`; por lo tanto, no afirmar que la serie esté sellada ni que la verificación de esos registros esté lista.
+- No ejecutar el relayer con mocks ni con la serie experimental sin aprobación explícita del equipo responsable de IDs, geometrías y umbrales.
 
-1. Desplegar el servicio `@vega/processing` en un entorno accesible públicamente.
-2. Configurar CORS para el dominio del frontend.
-3. Definir `VITE_ANALYSIS_API_URL` con la URL HTTPS real del servicio antes del build.
-4. Configurar el proyecto de hosting para el monorepo: instalación desde la raíz y build de `@vega/frontend`, publicando `frontend/dist`.
-5. Desplegar primero como preview y probar importación, consulta de estado, resultados e imágenes.
+## Despliegue remoto
 
-No se incluye una URL de API ficticia ni se afirma que exista un despliegue. Si se publica únicamente la landing sin backend, debe presentarse como sitio institucional/preview visual; el análisis remoto no estará operativo.
+No hay un despliegue público confirmado. Publicar solamente el frontend Vite no despliega el servicio de procesamiento.
 
-## Límites funcionales y científicos
+Para una demo remota:
 
-- La importación admite FeatureCollection con hasta cinco polígonos simples, según las validaciones del frontend y del servicio.
-- La vista previa cartográfica no equivale a validar que el polígono corresponda al salar nombrado.
-- El servicio puede no disponer de cobertura Sentinel-2 adecuada para todas las geometrías/fechas; los resultados pueden ser parciales o no tener datos.
-- Los IDs y umbrales para áreas personalizadas son provisionales hasta su revisión por el equipo.
-- No se publican automáticamente mediciones importadas en Avalanche. La revisión humana y científica sigue siendo necesaria.
-- No se deben reutilizar mediciones de ejemplo u on-chain de otra geometría como si correspondieran al área importada.
+1. Acordar con el responsable de infraestructura dónde operar el servicio I2 y dónde persistir `ANALYSIS_DATA_DIR`.
+2. Desplegar el backend con HTTPS, almacenamiento persistente y una sola instancia por directorio de datos.
+3. Configurar `ALLOWED_ORIGINS` con el origen exacto del frontend.
+4. Configurar `VITE_ANALYSIS_API_URL` con la URL HTTPS real del backend antes del build.
+5. Configurar el hosting del monorepo para instalar desde la raíz, ejecutar `npm run build -w @vega/frontend` y publicar `frontend/dist`.
+6. Probar en preview la carga GeoJSON, POST, seguimiento, resultado, imágenes y errores antes de compartir el enlace.
 
-## Pendientes para dar por cerrada la entrega
+No colocar una URL ficticia ni publicar una clave privada. `PRIVATE_KEY` debe permanecer en el entorno seguro del relayer; nunca en variables `VITE_*`.
 
-- [ ] Revisión visual en navegador en escritorio y móvil.
-- [ ] Prueba local del flujo completo con el servicio de procesamiento activo.
-- [ ] Validación de una geometría de origen conocido y revisión de resultados por el equipo científico.
-- [ ] Definir y desplegar backend remoto antes de ofrecer análisis desde un enlace público.
-- [ ] Revisar el orden de integración de PR #6, #7 y #8; no integrar sin aprobación de sus responsables.
+## Límites científicos y funcionales
+
+- El importador acepta FeatureCollection con 1–5 polígonos simples, WGS84, un anillo exterior y un área menor a 100 km². MultiPolygon y agujeros no están soportados en este flujo.
+- El servicio no certifica que el polígono aportado pertenezca al salar nombrado.
+- El cálculo actual exige que cada AOI esté completamente cubierto por una única escena/tesela aceptada. No hay mosaico multi-tesela; puede devolver cobertura insuficiente, `partial` o `no_data`.
+- La API documenta un catálogo piloto parcial: Hombre Muerto; no equivale a catálogo regional completo para Salta, Jujuy y Catamarca.
+- Los AOI de `sample-data/wetlands.geojson` son áreas piloto digitalizadas e inspeccionadas visualmente, no límites oficiales. No corresponden a la vega Tocomar seleccionada como alternativa científica.
+- Los umbrales 1500/1000/1200 son valores de integración heredados del contrato; no están calibrados como umbrales ecológicos. NDWI no demuestra contaminación, degradación ni causalidad minera.
+- Las áreas personalizadas reciben IDs provisionales. No se publican automáticamente en Avalanche.
+
+## Pendientes para cerrar la demo
+
+- [ ] Ejecutar backend y frontend localmente y recorrer el flujo completo en navegador.
+- [ ] Contrastar numéricamente 2–3 escenas NDWI con Copernicus Browser y registrar diferencias.
+- [ ] Validar con el equipo la geometría oficial/origen de cada AOI y los umbrales.
+- [ ] Recuperar y validar el polígono fuente de la vega Tocomar antes de usarla como piloto; no dibujar un polígono a partir de un punto o superficie publicada.
+- [ ] Revisar con I1/I2/I3 la selección de registros y publicar únicamente mediciones aprobadas.
+- [ ] Confirmar una transacción y un evento `WaterAlert` reales en Fuji; guardar links de explorer y respaldos.
+- [ ] Generar `published.json` y `frontend/public/records.json` a partir de publicaciones reales, nunca de mocks.
+- [ ] Desplegar backend y frontend en un entorno autorizado y probar preview.
+- [ ] Completar pitch deck, video demo y atribución final.
+
