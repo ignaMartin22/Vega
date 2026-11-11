@@ -7,6 +7,19 @@
 3. **Todos arrancan con mocks.** `sample-data/measurements.mock.json` tiene el formato y los hashes reales, el frontend tiene modo `mock` y el relayer puede probar contra Anvil local. Nadie queda bloqueado esperando el deploy o los datos reales.
 4. **La integración es cambiar un archivo, no una persona:** cuando I1 escribe `fuji.json` o I2 escribe `measurements.json`, los demás pasan de mock a real con una variable.
 
+## Primeros pasos (cada integrante, una sola vez)
+
+```bash
+git checkout main && git pull origin main
+git checkout -b i1/contratos        # o i2/datos, i3/relayer, i4/frontend
+npm install                         # Node 20 o más nuevo
+npm run mock                        # genera sample-data/measurements.mock.json
+cp .env.example .env                # completar solo lo que use tu rol (nunca se commitea)
+npm run typecheck                   # verificar que todo anda: no debe mostrar errores
+```
+
+Después abrí tu roadmap en [`roadmap/`](roadmap/) y seguí el Día 1. Para ver el frontend: `npm run dev:front` → http://localhost:5173
+
 ## Asignación
 
 | | Rol | Carpeta (dueño) | Entrega principal | Extra de entrega |
@@ -42,6 +55,9 @@ Ningún hito **bloquea**: si H1 o H3 se atrasan, los demás siguen con mocks y l
 ## Reglas de trabajo
 
 - **Ramas:** `i1/contratos`, `i2/datos`, `i3/relayer`, `i4/frontend`. PR o merge a `main` a menudo (al menos en cada hito). Como cada uno toca su carpeta, casi no habrá conflictos.
+- **Mantenerse al día:** antes de cada bloque de trabajo, `git pull origin main` en tu rama (o `git merge main`). Mergear a `main` seguido, como mínimo en cada hito.
+- **`package-lock.json` es uno solo para todo el monorepo** y es el conflicto más probable si dos personas agregan dependencias. Si aparece, **no resolverlo a mano**: `git checkout main -- package-lock.json && npm install`, y commitear el lockfile regenerado. Agregá dependencias solo en tu workspace: `npm install <paquete> -w @vega/<tu-paquete>`.
+- **`package.json` de la raíz y `README.md`:** avisá si agregás un script. El README final es de I1: pasale tus links en vez de editarlo.
 - **Commits** chicos y en español: `contracts: agrega evento WaterAlert`.
 - **Antes de mergear:** `npm run typecheck` desde la raíz (I1: además `forge test`).
 - **Secretos:** solo en `.env` (está en `.gitignore`). Nunca pegar la `PRIVATE_KEY` en el chat ni en el código.
