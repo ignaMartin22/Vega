@@ -1,22 +1,203 @@
 {
-  "type": "FeatureCollection",
-  "name": "vega-wetlands",
-  "_nota": "POLÍGONOS DE EJEMPLO (cuadrados aproximados). Integrante 2 los reemplaza por los humedales reales dibujados en geojson.io + Copernicus Browser. Mantener wetlandId 1..3 y thresholdNdwi en sync con contracts/script/Deploy.s.sol",
   "features": [
     {
+      "properties": {
+        "salar": "Salar del Hombre Muerto",
+        "name": "Laguna del sector sur (AOI piloto)",
+        "wetlandId": 1,
+        "thresholdNdwi": 1500
+      },
       "type": "Feature",
-      "properties": { "wetlandId": 1, "name": "Humedal 1 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1500 },
-      "geometry": { "type": "Polygon", "coordinates": [[[-67.10, -25.40], [-67.08, -25.40], [-67.08, -25.38], [-67.10, -25.38], [-67.10, -25.40]]] }
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -67.100286,
+              -25.473286
+            ],
+            [
+              -67.095714,
+              -25.467
+            ],
+            [
+              -67.088571,
+              -25.469
+            ],
+            [
+              -67.082857,
+              -25.474714
+            ],
+            [
+              -67.075429,
+              -25.479857
+            ],
+            [
+              -67.082571,
+              -25.481
+            ],
+            [
+              -67.092571,
+              -25.478429
+            ],
+            [
+              -67.100286,
+              -25.476143
+            ],
+            [
+              -67.100286,
+              -25.473286
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      }
     },
     {
+      "properties": {
+        "salar": "Salar del Hombre Muerto",
+        "name": "Laguna del sector central (AOI piloto)",
+        "wetlandId": 2,
+        "thresholdNdwi": 1000
+      },
       "type": "Feature",
-      "properties": { "wetlandId": 2, "name": "Humedal 2 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1000 },
-      "geometry": { "type": "Polygon", "coordinates": [[[-67.05, -25.45], [-67.03, -25.45], [-67.03, -25.43], [-67.05, -25.43], [-67.05, -25.45]]] }
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -67.035143,
+              -25.408714
+            ],
+            [
+              -67.025429,
+              -25.406714
+            ],
+            [
+              -67.015143,
+              -25.401857
+            ],
+            [
+              -67.009714,
+              -25.405857
+            ],
+            [
+              -67.013143,
+              -25.415286
+            ],
+            [
+              -67.018857,
+              -25.425286
+            ],
+            [
+              -67.022571,
+              -25.434143
+            ],
+            [
+              -67.030571,
+              -25.429857
+            ],
+            [
+              -67.031143,
+              -25.421
+            ],
+            [
+              -67.034857,
+              -25.415
+            ],
+            [
+              -67.035143,
+              -25.408714
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      }
     },
     {
+      "properties": {
+        "salar": "Salar del Hombre Muerto",
+        "name": "Vega fluvial oriental (AOI piloto)",
+        "wetlandId": 3,
+        "thresholdNdwi": 1200
+      },
       "type": "Feature",
-      "properties": { "wetlandId": 3, "name": "Humedal 3 (ejemplo)", "salar": "A definir", "thresholdNdwi": 1200 },
-      "geometry": { "type": "Polygon", "coordinates": [[[-67.00, -25.35], [-66.98, -25.35], [-66.98, -25.33], [-67.00, -25.33], [-67.00, -25.35]]] }
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -67.024571,
+              -25.377
+            ],
+            [
+              -67.019429,
+              -25.375
+            ],
+            [
+              -67.011714,
+              -25.377857
+            ],
+            [
+              -67.002286,
+              -25.378714
+            ],
+            [
+              -66.992286,
+              -25.376143
+            ],
+            [
+              -66.982286,
+              -25.375286
+            ],
+            [
+              -66.974286,
+              -25.369857
+            ],
+            [
+              -66.968571,
+              -25.366714
+            ],
+            [
+              -66.965714,
+              -25.367857
+            ],
+            [
+              -66.972286,
+              -25.372429
+            ],
+            [
+              -66.979429,
+              -25.377857
+            ],
+            [
+              -66.989429,
+              -25.379571
+            ],
+            [
+              -66.999714,
+              -25.382429
+            ],
+            [
+              -67.008,
+              -25.382714
+            ],
+            [
+              -67.016,
+              -25.380143
+            ],
+            [
+              -67.021714,
+              -25.381
+            ],
+            [
+              -67.024571,
+              -25.377
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      }
     }
-  ]
+  ],
+  "name": "vega-hombre-muerto-pilot",
+  "_nota": "AOI de monitoreo piloto digitalizadas por inspeccion visual de Esri World Imagery. No son limites oficiales de humedales. Validacion Sentinel-2 y umbrales: ver processing/README.md y sample-data/AOI.md. Se conservan IDs y umbrales de integracion.",
+  "type": "FeatureCollection"
 }

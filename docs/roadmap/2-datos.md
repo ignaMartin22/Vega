@@ -4,6 +4,8 @@
 **Entregás:** serie histórica real de NDWI (`HashedMeasurement[]`) para 2 o 3 humedales de un salar real
 **No dependés de nadie:** no necesitás el contrato ni el relayer. Tu salida es un archivo JSON con formato fijo.
 
+**Avance:** motor por comando y 105 registros experimentales de 2023–2025; primer servicio HTTP local con trabajos persistidos, período móvil de tres años y PNG por AOI. Nueve pruebas y una solicitud HTTP real con dry-run de I3 aprobados. **Falta completar:** catálogo regional, geometrías complejas/mosaicos del salar e integración frontend/infraestructura. Uso y límites en [`processing/API.md`](../../processing/API.md); checklist SDD en [specs/i2-web-analysis/tasks.md](../specs/i2-web-analysis/tasks.md). La prueba histórica se documenta en [`processing/HANDOFF.md`](../../processing/HANDOFF.md).
+
 ## Día 1 · Mié 11
 
 - [ ] **Elegir el salar** (con humedales visibles y conflicto conocido; validar con el equipo en 5 minutos)
