@@ -2,14 +2,15 @@
 
 **Corte de revisión:** 11 de noviembre de 2026  
 **Repositorio:** `ignaMartin22/Vega` · rama principal `main`  
-**Commit revisado:** `91aae6b6f6d1b95816afdf94f58793f31fa921e3`
+**Commit revisado:** `0347e428cc73bac67c0e0125944bf2e2d419f490`
 
 Este documento distingue código integrado, evidencia disponible y tareas que todavía requieren ejecución o validación humana. No debe interpretarse como certificación científica ni como confirmación de despliegue.
 
 ## 1. Integración GitHub
 
-- PR #5, #6, #7, #8, #9 y #10 están integrados en `main`.
+- PR #5, #6, #7, #8, #9, #10, #11 y #12 están integrados en `main`.
 - PR #1–#4 se cerraron como reemplazados o ya cubiertos.
+- PR #11 actualizó el handoff y este estado integral; PR #12 incorporó el pitch y guion de demo.
 - En la revisión del 11/11 no había PR abiertos ni issues abiertos.
 - Los checks de CI asociados a las integraciones de frontend y processing finalizaron correctamente. La aprobación del CI no sustituye una prueba manual del producto.
 
@@ -81,7 +82,13 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 - [ ] Preparar pitch de 5–7 diapositivas y video de 1–3 minutos con una transacción verificable.
 - [ ] Actualizar README con URLs reales y atribución.
 
-## 6. Comandos de comprobación
+## 6. Materiales para la entrega
+
+- `docs/PITCH_DEMO.md`: narrativa de seis diapositivas, guion de video y checklist de grabación.
+- `docs/FRONTEND_HANDOFF.md`: operación local, despliegue y límites del frontend.
+- `docs/AVANCES.md` y `docs/roadmap/`: coordinación y responsabilidades del equipo.
+
+## 7. Comandos de comprobación
 
 Desde la raíz:
 
@@ -115,7 +122,7 @@ npm run dry -w @vega/relayer
 
 **Importante:** `dry` valida hashes; no publica ni demuestra que haya ocurrido una transacción. La publicación real requiere autorización expresa del equipo y secretos locales seguros.
 
-## 7. Límites de comunicación
+## 8. Límites de comunicación
 
 - NDWI es un indicador espectral; no mide directamente volumen de agua ni prueba contaminación o causalidad minera.
 - Una coincidencia de hash prueba integridad del registro respecto de los campos hasheados; no certifica por sí sola la calidad de la escena ni la verdad de la interpretación.
