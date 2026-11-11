@@ -7,9 +7,10 @@
  *   MEASUREMENTS=sample-data/measurements.json npm run relay   -> usa los datos reales
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { Contract, JsonRpcProvider, Wallet } from "ethers";
+import { Contract, JsonRpcProvider, NonceManager, Wallet } from "ethers";
 import { FUJI, VEGA_REGISTRY_ABI, VEGA_REGISTRY_ADDRESS, hashRecord, txUrl, type HashedMeasurement } from "@vega/shared";
 import { mergeMeasurements, mergePublishedMeasurements, type PublishedMeasurement } from "./outputs.js";
+import { retryRpc } from "./retry.js";
 import { selectMeasurements } from "./selection.js";
 
 const ROOT = new URL("../../", import.meta.url);
@@ -43,18 +44,32 @@ if (!process.env.PRIVATE_KEY) throw new Error("Falta PRIVATE_KEY en .env");
 
 const provider = new JsonRpcProvider(process.env.FUJI_RPC_URL ?? FUJI.rpcUrl);
 const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
-const registry = new Contract(address, VEGA_REGISTRY_ABI, wallet);
+const signer = new NonceManager(wallet);
+const registry = new Contract(address, VEGA_REGISTRY_ABI, signer);
 
 const previousPublished = readArray<PublishedMeasurement>(PUBLISHED_URL);
 const previousRecords = readArray<HashedMeasurement>(RECORDS_URL);
 const published: PublishedMeasurement[] = [];
 for (const r of selectedRecords) {
-  if (await registry.isRecorded(r.dataHash)) {
+  if (await retryRpc(() => registry.isRecorded(r.dataHash))) {
     console.log(`= ya sellado ${r.sceneId}`);
     continue; // idempotente: se puede re-ejecutar sin duplicar
   }
-  const tx = await registry.recordMeasurement(r.wetlandId, r.ndwi, r.sceneId, r.dataHash, r.timestamp);
-  await tx.wait();
+  let tx;
+  try {
+    tx = await registry.recordMeasurement(r.wetlandId, r.ndwi, r.sceneId, r.dataHash, r.timestamp);
+  } catch (error) {
+    signer.reset();
+    console.error(`Falló el envío de ${r.sceneId}; nonce reiniciado. Revisa el estado en Fuji antes de repetir manualmente.`);
+    throw error;
+  }
+  try {
+    await retryRpc(() => tx.wait());
+  } catch (error) {
+    signer.reset();
+    console.error(`No se pudo confirmar ${r.sceneId}; revisa la transacción ${txUrl(tx.hash)} antes de volver a ejecutar.`);
+    throw error;
+  }
   console.log(`+ ${r.sceneId} ndwi=${r.ndwi} ${txUrl(tx.hash)}`);
   published.push({ ...r, txHash: tx.hash });
 }
