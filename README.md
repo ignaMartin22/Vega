@@ -134,6 +134,7 @@ docs/         reparto de roles, interfaces y roadmap por integrante
 - **Reparto de tareas y línea de tiempo:** [`docs/ROLES.md`](docs/ROLES.md)
 - **Interfaces congeladas entre módulos:** [`docs/INTERFACES.md`](docs/INTERFACES.md)
 - **Roadmap individual:** [`docs/roadmap/`](docs/roadmap/)
+- **Avances y próximos pasos por integrante:** [`docs/AVANCES.md`](docs/AVANCES.md)
 
 ```bash
 npm install          # instala todos los workspaces (Node 20+)
@@ -150,12 +151,12 @@ cp .env.example .env # variables (PRIVATE_KEY solo de la cuenta del hackathon)
 
 ### Día 1 (miércoles 11): setup y contrato
 - [x] Crear el repo y la estructura: `contracts/`, `relayer/`, `frontend/`, `sample-data/`
-- [ ] Instalar **Core Wallet**, crear una cuenta solo para el hackathon y agregar la red **Fuji**
-- [ ] Pedir AVAX de prueba en el **faucet de Builder Hub**
+- [x] Instalar **Core Wallet**, crear una cuenta solo para el hackathon y agregar la red **Fuji**
+- [x] Pedir AVAX de prueba en el **faucet de Builder Hub**
 - [ ] Elegir el salar y dibujar los polígonos de 2 o 3 humedales en GeoJSON (geojson.io + Copernicus Browser)
 - [ ] Probar **Earth Search STAC**: buscar escenas Sentinel-2 del polígono con `eo:cloud_cover < 20` y guardar la respuesta en `sample-data/`
-- [ ] Escribir `VegaRegistry.sol` y sus tests en Foundry
-- [ ] **Desplegar en Fuji temprano** y guardar la dirección y el link al explorer
+- [x] Escribir `VegaRegistry.sol` y sus tests en Foundry
+- [x] **Desplegar en Fuji temprano** y guardar la dirección y el link al explorer
 
 ### Día 2 (jueves 12): datos, relayer y frontend
 - [ ] Script de NDWI: descargar las bandas B03 y B08 (COG) del polígono y calcular el NDWI medio
@@ -176,7 +177,7 @@ cp .env.example .env # variables (PRIVATE_KEY solo de la cuenta del hackathon)
 
 ## 📦 Checklist de entrega (antes del 13/11, 09:00)
 
-- [ ] **Contrato desplegado en Fuji** + link al explorer → `0x...` *(completar)*
+- [x] **Contrato desplegado en Fuji** + link al explorer → [`0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`](https://explorer-test.avax.network/c-chain/address/0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5)
 - [ ] **Video demo** con una acción on-chain → *(link)*
 - [ ] **Pitch deck** con la slide "por qué blockchain" → *(link)*
 - [ ] **Repo** → este repositorio
