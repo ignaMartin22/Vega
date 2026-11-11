@@ -1,6 +1,6 @@
 ﻿# Datos satelitales de Vega (I2)
 
-> **Estado:** motor experimental por comando. El alcance acordado requiere dispararlo desde la web, admitir catálogo y dibujo de áreas y producir imágenes de evolución de los últimos tres años. Ese servicio todavía debe implementarse; ver [SDD](../docs/SDD-I2-SENTINEL2.md). El período fijo y los archivos siguientes pertenecen a la prueba técnica anterior.
+> **Estado:** existe un primer servicio HTTP de análisis, con trabajos persistidos, tres años móviles e imágenes por área. Catálogo piloto parcial; todavía no completa el alcance regional ni el mosaico del salar. Ver [API.md](API.md) para usarlo y sus límites. El período fijo y los archivos históricos descriptos abajo pertenecen a la prueba técnica anterior.
 
 El pipeline consulta Sentinel-2 L2A en Earth Search, calcula NDWI sobre cada AOI y escribe `HashedMeasurement[]` con `withHash()` de `@vega/shared`. No cambia el esquema ni las interfaces del equipo.
 

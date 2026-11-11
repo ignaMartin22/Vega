@@ -1,8 +1,10 @@
 # Propuesta de integración: Sol ↔ análisis I2 ↔ Gaby
 
-**Estado: borrador de coordinación, no API implementada ni acuerdo confirmado con I3/I4.**
+**Estado: diseño de integración; primer incremento HTTP local implementado, sin acuerdo de despliegue confirmado con I3/I4.**
 
-Complementa [SDD-I2-SENTINEL2.md](SDD-I2-SENTINEL2.md). El usuario confirmó análisis desde un botón, elección por catálogo y dibujo de áreas en salares de Salta/Jujuy/Catamarca, evolución temporal por imágenes y últimos tres años por defecto. Los acuerdos de despliegue/integración con I3/I4 siguen pendientes; estos endpoints aún no están implementados.
+Actualización: el primer incremento implementa las rutas locales y trabajos descriptos en [`processing/API.md`](../processing/API.md). Este documento conserva el diseño del alcance final; los límites actuales (catálogo parcial, Polygon simple y secuencias por AOI) se detallan en la documentación operativa. No existe aún acuerdo de despliegue ni integración UI con I3/I4.
+
+Complementa [SDD-I2-SENTINEL2.md](SDD-I2-SENTINEL2.md). El usuario confirmó análisis desde un botón, elección por catálogo y dibujo de áreas en salares de Salta/Jujuy/Catamarca, evolución temporal por imágenes y últimos tres años por defecto. Los acuerdos de despliegue/integración con I3/I4 siguen pendientes. La documentación operativa describe qué endpoints y modalidades del diseño están implementados.
 
 ## Responsabilidades propuestas
 

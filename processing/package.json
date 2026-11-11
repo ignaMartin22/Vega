@@ -9,7 +9,8 @@
     "typecheck": "tsc -p .",
     "test": "tsx --test test/*.test.ts",
     "preview": "tsx src/preview.ts",
-    "summary": "tsx src/summarize.ts"
+    "summary": "tsx src/summarize.ts",
+    "serve": "tsx src/serve.ts"
   },
   "dependencies": {
     "@vega/shared": "*",

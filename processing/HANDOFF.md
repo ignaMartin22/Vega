@@ -1,6 +1,6 @@
 # Entrega I2 → I3/I4
 
-> **Prueba técnica previa al SDD.** Los archivos siguientes son datos experimentales reutilizables; no completan la entrega funcional desde la web. El alcance vigente incluye catálogo + dibujo, evolución por imágenes y tres años móviles: ver [SDD](../docs/SDD-I2-SENTINEL2.md). La API y el flujo web todavía deben implementarse.
+> **Prueba técnica previa al SDD.** Los archivos siguientes son datos experimentales reutilizables; no completan la entrega funcional desde la web. El alcance vigente incluye catálogo + dibujo, evolución por imágenes y tres años móviles: ver [SDD](../docs/SDD-I2-SENTINEL2.md). Para el primer servicio HTTP local ya implementado y sus límites, ver [API.md](API.md); el flujo completo con el frontend aún debe integrarse.
 
 Serie real del Salar del Hombre Muerto, Sentinel-2 L2A, enero 2023–diciembre 2025. No se modificaron las interfaces de `shared/`, el contrato, el relayer ni el frontend.
 

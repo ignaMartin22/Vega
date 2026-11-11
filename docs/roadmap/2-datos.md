@@ -4,7 +4,7 @@
 **Entregás:** serie histórica real de NDWI (`HashedMeasurement[]`) para 2 o 3 humedales de un salar real
 **No dependés de nadie:** no necesitás el contrato ni el relayer. Tu salida es un archivo JSON con formato fijo.
 
-**Prueba técnica implementada:** motor por comando y 105 registros experimentales de 2023–2025. Tres AOI piloto inspeccionadas sobre Sentinel-2, cinco pruebas y dry-run del relayer aprobados; tres meses excluidos por cobertura insuficiente. **Alcance funcional vigente:** análisis desde botón web, catálogo + dibujo y evolución por imágenes de los últimos tres años. Ese flujo aún debe implementarse según [SDD-I2-SENTINEL2.md](../SDD-I2-SENTINEL2.md). La prueba previa se documenta en [`processing/HANDOFF.md`](../../processing/HANDOFF.md).
+**Avance:** motor por comando y 105 registros experimentales de 2023–2025; primer servicio HTTP local con trabajos persistidos, período móvil de tres años y PNG por AOI. Nueve pruebas y una solicitud HTTP real con dry-run de I3 aprobados. **Falta completar:** catálogo regional, geometrías complejas/mosaicos del salar e integración frontend/infraestructura. Uso y límites en [`processing/API.md`](../../processing/API.md); checklist SDD en [specs/i2-web-analysis/tasks.md](../specs/i2-web-analysis/tasks.md). La prueba histórica se documenta en [`processing/HANDOFF.md`](../../processing/HANDOFF.md).
 
 ## Día 1 · Mié 11
 
