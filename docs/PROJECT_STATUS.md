@@ -19,7 +19,7 @@ Este documento distingue código integrado, evidencia disponible y tareas que to
 | Componente | Estado comprobado | Qué falta |
 |---|---|---|
 | Contrato VegaRegistry | Desplegado en Avalanche Fuji; dirección en `shared/deployments/fuji.json` | Confirmar publicaciones reales de la serie elegida y guardar evidencia de eventos |
-| Procesamiento Sentinel-2 | Motor NDWI, STAC paginado, selección mensual, servicio HTTP y entrada GeoJSON configurable | Mosaicos, catálogo regional, validación científica externa |
+| Procesamiento Sentinel-2 | Motor NDWI, STAC paginado, selección mensual, servicio HTTP, entrada GeoJSON configurable (Polygon/MultiPolygon), mosaicos multi-tesela y catálogo regional Salta/Jujuy/Catamarca (135 salares, 506 cuerpos de agua; ver `processing/API.md`) | Validación científica externa |
 | Frontend | Landing, mapa, importación GeoJSON, panel de análisis, visualización de resultados y verificación on-chain | Prueba manual integral y datos reales publicados |
 | GeoJSON personalizado | Validación en frontend/API y búsqueda STAC por geometría | No certifica la identidad territorial del polígono |
 | Relayer | Valida hashes, evita duplicados y puede generar archivos de publicación y verificación | Ejecutar publicación aprobada; no se encontraron artefactos versionados de publicaciones reales |
@@ -43,7 +43,7 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 1. **Geometría del piloto:** las tres áreas del GeoJSON actual son AOI digitalizadas, no límites oficiales. Para usar Tocomar/Olaroz se debe obtener la geometría original del inventario científico y validarla; el punto y la superficie publicados no alcanzan para reconstruir un polígono.
 2. **Umbrales:** el contrato conserva 1500/1000/1200 (NDWI × 10.000). Son valores de integración, no umbrales ecológicos calibrados. La vegetación puede dar NDWI negativo sin indicar degradación.
 3. **Publicación:** antes de transmitir, I1/I2/I3 deben aprobar geometría, wetlandId, umbral, conjunto de registros y wallet publicadora. No publicar mocks ni datos de otra geometría.
-4. **Cobertura:** el servicio requiere cobertura completa del AOI en una sola tesela/escena aceptada. No realiza mosaico multi-tesela y el catálogo no es regional completo.
+4. **Cobertura:** desde la integración de `i2/sdd-sentinel2` el servicio compone mosaicos de teselas de una misma adquisición y el catálogo cubre las capas IGN/USGS de las tres provincias. "Completo" significa completo respecto de esas capas, no un inventario ecológico exhaustivo de humedales.
 5. **Infraestructura:** el backend HTTP necesita almacenamiento persistente, HTTPS y CORS. El hosting estático del frontend no despliega el backend.
 6. **Prueba de producto:** no hay evidencia de una prueba manual de extremo a extremo en navegador ni de un deployment público.
 
