@@ -6,6 +6,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "search": "tsx src/search.ts",
+    "test": "node --import tsx --test src/wetlands.test.ts",
     "typecheck": "tsc -p ."
   },
   "dependencies": {
