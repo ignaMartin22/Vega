@@ -2,97 +2,99 @@
 
 ## Estado de integración (11/11/2026)
 
-La landing y el flujo de análisis están integrados en `main` mediante los PR #7 y #8. El contrato de API para GeoJSON personalizado está integrado mediante el PR #6. La verificación de integridad on-chain del frontend está integrada mediante el PR #9; la entrada GeoJSON configurable y la consulta STAC espacial del pipeline CLI, mediante el PR #10. La actualización documental y el pitch/demo se incorporaron mediante los PR #11 y #12.
+La landing, el flujo de análisis y la verificación on-chain están integrados en main. El backend I2 incorporó catálogo regional, selección de áreas, geometrías Polygon/MultiPolygon con agujeros, mosaicos de teselas y fotogramas de evolución. Los cambios del catálogo y mosaicos de i2/sdd-sentinel2 también están integrados.
 
-Esta documentación describe el estado actual de `main`; no es necesario integrar esos PR nuevamente.
+Índice: [estado integral](PROJECT_STATUS.md) · [pitch y guion de demo](PITCH_DEMO.md) · [API de procesamiento](../processing/API.md).
 
-Índice de entrega: [estado integral](PROJECT_STATUS.md) · [pitch y guion de demo](PITCH_DEMO.md).
+## Qué está disponible
 
-## Qué funciona en el repositorio
+- Landing institucional responsive y plataforma interactiva en frontend/.
+- API local en processing/: catálogo regional, consulta de salares/cuerpos de agua, solicitudes asíncronas, progreso, resultados, mediciones, incidencias y PNGs.
+- Catálogo documentado: 135 entradas de salares/salinas y 506 cuerpos de agua cartografiados. La cobertura es respecto de las capas IGN/USGS usadas; no representa un inventario ecológico exhaustivo.
+- Motor Sentinel-2 con STAC paginado, selección mensual y mosaicos de teselas de la misma adquisición/plataforma dentro de una ventana de 15 minutos.
+- Cálculo NDWI en grilla UTM WGS84 de 10 m, máscara SCL y control de píxeles válidos. El método mosaic-v2 compromete la geometría canónica en el hash.
+- Contrato VegaRegistry desplegado en Fuji y componente frontend para contrastar el registro off-chain con hash/campos on-chain.
+- Relayer con validación de hash, deduplicación, historial acumulado, registros records.json, filtros --only-wetland/--limit y reintentos RPC.
 
-- Landing institucional responsive y plataforma interactiva en `frontend/`.
-- Importación de GeoJSON desde la interfaz, validación y envío a `POST /api/analyses`.
-- Seguimiento de trabajos, resultados NDWI, incidencias y fotogramas Sentinel-2.
-- Servicio HTTP local de procesamiento con estado persistido y endpoint de salud.
-- Entrada GeoJSON configurable para el pipeline CLI mediante `WETLANDS_GEOJSON`.
-- Consulta STAC espacial con la geometría completa (`intersects`), paginación y selección mensual.
-- Contrato `VegaRegistry` desplegado en Fuji y botón de verificación de registro/hash/campos.
+## Límites distintos entre la interfaz y la API
+
+La importación web actual (frontend/src/data/analysis-geojson.ts) acepta FeatureCollection de 1 a 5 Features Polygon simples, un único anillo exterior, 4–501 posiciones por anillo, coordenadas WGS84 y archivo máximo de 5 MiB.
+
+La API I2 es más amplia: acepta áreas Polygon/MultiPolygon con agujeros válidos, hasta 20.000 coordenadas y 250 km² por área dibujada; admite hasta cinco áreas. La compatibilidad GeoJSON FeatureCollection por la API tiene límite de cuerpo de 4 MiB. Para usar geometrías que la interfaz aún no admite, se puede llamar la API directamente conforme a processing/API.md.
+
+El servicio limita el ámbito a Salta, Jujuy y Catamarca y al entorno de monitoreo del salar seleccionado. Para salares no catalogados permite áreas de usuario dentro de la región, pero no inventa ni certifica un contorno oficial. El entorno de consulta de 15 km es un rectángulo operativo, no una cuenca hidrográfica.
 
 ## Ejecutar localmente
 
-Requisitos: Node.js 22 y npm. Desde la raíz del repositorio:
+Requisitos: Node.js 22 y npm. Desde la raíz:
 
 Terminal 1 — servicio de análisis:
 
-```bash
+\`\`\`bash
 npm ci
 npm run serve -w @vega/processing
-```
+\`\`\`
 
 Terminal 2 — frontend:
 
-```bash
+\`\`\`bash
 npm run dev:front
-```
+\`\`\`
 
-Vite suele escuchar en `http://localhost:5173`; la API local escucha en `http://127.0.0.1:8787`.
+Vite suele escuchar en http://localhost:5173; la API local en http://127.0.0.1:8787. La interfaz usa por defecto esa API local. Para cambiarla, definir VITE_ANALYSIS_API_URL en el entorno de Vite o en el .env de la raíz (frontend/vite.config.ts usa envDir: "..").
 
-La interfaz usa por defecto `http://127.0.0.1:8787`. Para cambiar el origen, definir `VITE_ANALYSIS_API_URL` en el entorno de Vite o en el `.env` de la raíz (el `vite.config.ts` de frontend configura `envDir: ".."`).
+Comprobaciones desde la raíz:
 
-Comprobaciones:
-
-```bash
+\`\`\`bash
 npm run typecheck
 npm test -w @vega/frontend
 npm test -w @vega/processing
+npm test -w @vega/relayer
 npm run build -w @vega/frontend
-```
+\`\`\`
 
-El CI de los PR integrados ejecutó las comprobaciones correspondientes. Eso no reemplaza la prueba manual del flujo completo en navegador.
+El CI de los PR integrados ejecutó sus comprobaciones correspondientes; eso no sustituye una prueba manual del flujo completo en navegador.
 
-## Fuente de datos y estado de Avalanche
+## Datos y Avalanche
 
-- El frontend arranca en modo `mock` si no se configura `VITE_DATA_SOURCE=chain`.
-- En modo `chain`, lee `VegaRegistry` en Fuji y busca el registro off-chain en `VITE_RECORDS_URL` (por defecto `/records.json`).
-- Dirección del contrato: `0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`; red Fuji C-Chain, Chain ID 43113.
-- La serie histórica `sample-data/measurements.json` contiene 105 registros experimentales Sentinel-2 para tres AOI del piloto Hombre Muerto (2023–2025). Su handoff documenta hashes válidos y huecos de cobertura.
-- La existencia de esa serie no demuestra que se haya publicado en Fuji. En el estado revisado no están versionados `sample-data/published.json` ni `frontend/public/records.json`; por lo tanto, no afirmar que la serie esté sellada ni que la verificación de esos registros esté lista.
-- No ejecutar el relayer con mocks ni con la serie experimental sin aprobación explícita del equipo responsable de IDs, geometrías y umbrales.
+- El frontend inicia en modo mock salvo que se configure VITE_DATA_SOURCE=chain.
+- En modo chain, lee VegaRegistry en Fuji y busca el registro off-chain en VITE_RECORDS_URL (por defecto /records.json).
+- Contrato: 0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5; red Fuji C-Chain, Chain ID 43113.
+- La serie sample-data/measurements.json contiene 105 registros experimentales para tres AOI del piloto Hombre Muerto (2023–2025). Los hashes fueron validados en dry-run; esto no significa que estén publicados.
+- El repositorio revisado no contiene sample-data/published.json ni frontend/public/records.json. No afirmar que la serie esté sellada ni que la verificación de esos registros esté demostrada.
+- docs/AVANCES.md registra que la wallet pública del relayer fue autorizada por I1. Antes de transmitir, confirmar el estado actual del publisher, IDs, geometrías y umbrales con el equipo.
+- No ejecutar el relayer con mocks ni con la serie experimental sin aprobación expresa del responsable de datos/contratos.
+
+## Procesamiento: alcance y cautelas
+
+- Se consultan escenas Sentinel-2 L2A y se agrupan teselas de la misma adquisición/plataforma con diferencia máxima de 15 minutos; no se mezclan días distintos para fingir una captura.
+- El mosaico usa grilla de 10 m, calibración/offset del proveedor, máscara SCL y resolución estable de solapamientos. Se exige al menos 50% de centros de píxel válidos por AOI.
+- El servicio trabaja con 36 ventanas mensuales para el período predeterminado de tres años. Puede devolver partial o no_data; no_data significa datos insuficientes, no ausencia de agua.
+- Las secuencias frames corresponden a cada humedal; salarFrames corresponde al encuadre del salar completo y exige cobertura visual del 90%.
+- NDWI es un indicador espectral, no mide directamente volumen de agua ni prueba contaminación, degradación o causalidad minera.
+- Los umbrales 1500/1000/1200 heredados del contrato no son umbrales ecológicos calibrados.
+- Los AOI de sample-data/wetlands.geojson son áreas piloto digitalizadas e inspeccionadas, no límites oficiales. Para Tocomar hace falta recuperar y validar el vector de fuente; no reconstruirlo a partir de un punto.
 
 ## Despliegue remoto
 
-No hay un despliegue público confirmado. Publicar solamente el frontend Vite no despliega el servicio de procesamiento.
+No hay un despliegue público confirmado. Publicar el frontend estático no despliega el backend.
 
-Para una demo remota:
+1. Acordar el entorno y responsable de operación del backend.
+2. Desplegar processing con HTTPS, almacenamiento persistente para ANALYSIS_DATA_DIR y una instancia por directorio.
+3. Configurar ALLOWED_ORIGINS con el origen exacto del frontend.
+4. Configurar VITE_ANALYSIS_API_URL con la URL HTTPS real del backend antes del build.
+5. Configurar el hosting del monorepo para instalar desde la raíz, ejecutar npm run build -w @vega/frontend y publicar frontend/dist.
+6. Probar desde otra red/dispositivo: catálogo, carga, POST, progreso, resultado, imágenes, errores y CORS.
 
-1. Acordar con el responsable de infraestructura dónde operar el servicio I2 y dónde persistir `ANALYSIS_DATA_DIR`.
-2. Desplegar el backend con HTTPS, almacenamiento persistente y una sola instancia por directorio de datos.
-3. Configurar `ALLOWED_ORIGINS` con el origen exacto del frontend.
-4. Configurar `VITE_ANALYSIS_API_URL` con la URL HTTPS real del backend antes del build.
-5. Configurar el hosting del monorepo para instalar desde la raíz, ejecutar `npm run build -w @vega/frontend` y publicar `frontend/dist`.
-6. Probar en preview la carga GeoJSON, POST, seguimiento, resultado, imágenes y errores antes de compartir el enlace.
-
-No colocar una URL ficticia ni publicar una clave privada. `PRIVATE_KEY` debe permanecer en el entorno seguro del relayer; nunca en variables `VITE_*`.
-
-## Límites científicos y funcionales
-
-- El importador acepta FeatureCollection con 1–5 polígonos simples, WGS84, un anillo exterior y un área menor a 100 km². MultiPolygon y agujeros no están soportados en este flujo.
-- El servicio no certifica que el polígono aportado pertenezca al salar nombrado.
-- El cálculo actual exige que cada AOI esté completamente cubierto por una única escena/tesela aceptada. No hay mosaico multi-tesela; puede devolver cobertura insuficiente, `partial` o `no_data`.
-- La API documenta un catálogo piloto parcial: Hombre Muerto; no equivale a catálogo regional completo para Salta, Jujuy y Catamarca.
-- Los AOI de `sample-data/wetlands.geojson` son áreas piloto digitalizadas e inspeccionadas visualmente, no límites oficiales. No corresponden a la vega Tocomar seleccionada como alternativa científica.
-- Los umbrales 1500/1000/1200 son valores de integración heredados del contrato; no están calibrados como umbrales ecológicos. NDWI no demuestra contaminación, degradación ni causalidad minera.
-- Las áreas personalizadas reciben IDs provisionales. No se publican automáticamente en Avalanche.
+No colocar URL ficticia ni secretos en el repositorio. PRIVATE_KEY debe permanecer en el entorno seguro del relayer; nunca en variables VITE_*.
 
 ## Pendientes para cerrar la demo
 
-- [ ] Ejecutar backend y frontend localmente y recorrer el flujo completo en navegador.
-- [ ] Contrastar numéricamente 2–3 escenas NDWI con Copernicus Browser y registrar diferencias.
-- [ ] Validar con el equipo la geometría oficial/origen de cada AOI y los umbrales.
-- [ ] Recuperar y validar el polígono fuente de la vega Tocomar antes de usarla como piloto; no dibujar un polígono a partir de un punto o superficie publicada.
-- [ ] Revisar con I1/I2/I3 la selección de registros y publicar únicamente mediciones aprobadas.
-- [ ] Confirmar una transacción y un evento `WaterAlert` reales en Fuji; guardar links de explorer y respaldos.
-- [ ] Generar `published.json` y `frontend/public/records.json` a partir de publicaciones reales, nunca de mocks.
+- [ ] Ejecutar frontend y API juntos y recorrer el flujo en navegador.
+- [ ] Contrastar 2–3 fechas NDWI con Copernicus Browser y registrar diferencias.
+- [ ] Validar con especialistas la geometría del AOI que se presentará y los umbrales.
+- [ ] Recuperar el vector fuente de Tocomar si se elige esa vega.
+- [ ] Aprobar el conjunto de registros y publicar una muestra pequeña; verificar transacción y evento en Fuji.
+- [ ] Generar published.json y records.json solo desde publicaciones reales.
 - [ ] Desplegar backend y frontend en un entorno autorizado y probar preview.
-- [ ] Completar pitch deck, video demo y atribución final.
-
+- [ ] Grabar video demo y completar atribución.

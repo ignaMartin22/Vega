@@ -1,6 +1,6 @@
 # 💧 Vega
 
-**Datos satelitales del agua de la Puna que nadie puede modificar.**
+**Evidencia satelital del agua de la Puna, con trazabilidad verificable.**
 Confianza verificable entre la minería, las comunidades y los compradores de litio.
 
 > **Hackathon Argentina Space 2026** · Salta, 11–13 de noviembre · **Track Blockchain Avalanche**
@@ -23,11 +23,21 @@ En la Puna (Salta, Jujuy, Catamarca), la minería de litio y las comunidades com
 
 ## 💡 La solución
 
-**Vega** monitorea por satélite los humedales cercanos a los salares y registra cada medición en **Avalanche**. Queda un **historial público, con fecha cierta e inmodificable**: no lo pueden alterar ni la empresa, ni el Estado, ni nosotros.
+**Vega** permite analizar humedales y áreas de interés de la Puna con imágenes Sentinel-2, conservar la procedencia de cada observación y preparar registros verificables. Una medición solo pasa a **Avalanche** después de la revisión y autorización del equipo; la blockchain aporta integridad y trazabilidad al registro publicado, no certifica por sí sola la interpretación ambiental.
 
-1. **Medimos.** Imágenes **Sentinel-2** (Copernicus, gratuitas) calculan el índice de agua **NDWI** de cada humedal.
-2. **Sellamos.** El valor, la fecha, la escena de origen y el **hash** del dato se guardan on-chain.
-3. **Alertamos y mostramos.** Si el NDWI cae bajo el umbral, el contrato emite una **alerta pública**. Un mapa muestra la evolución del humedal y un botón **"Verificar"** compara el dato con lo registrado en la cadena.
+1. **Medimos.** El servicio consulta escenas **Sentinel-2** (Copernicus), aplica controles de calidad y calcula **NDWI** sobre las áreas seleccionadas.
+2. **Revisamos y preparamos.** Cada observación conserva escena, fecha, cobertura, método y hash. Las geometrías y los umbrales requieren validación antes de publicar.
+3. **Publicamos y verificamos.** Un relayer autorizado puede registrar mediciones aprobadas en Avalanche. El contrato emite **WaterAlert** únicamente si existe un umbral configurado y la medición queda por debajo. El frontend permite contrastar el registro off-chain con la cadena.
+
+### Estado operativo del MVP · 11/11/2026
+
+- El contrato VegaRegistry está desplegado en Avalanche Fuji.
+- El backend incorpora un catálogo regional de 135 salares/salinas y 506 cuerpos de agua cartografiados de las capas documentadas; no es un inventario ecológico exhaustivo.
+- El motor Sentinel-2 compone teselas de una misma adquisición y procesa Polygon/MultiPolygon. La importación GeoJSON de la interfaz web tiene validaciones más restrictivas que la API.
+- La serie de 105 registros del piloto Hombre Muerto es experimental. No hay evidencia versionada de que esa serie esté publicada en Fuji; no afirmar que ya está sellada.
+- La interfaz inicia en modo mock si no se configura la fuente chain. No hay un despliegue público confirmado y el backend debe desplegarse por separado.
+
+Para operar localmente y conocer los límites, consultar [estado integral](docs/PROJECT_STATUS.md), [API de procesamiento](processing/API.md) y [entrega del frontend](docs/FRONTEND_HANDOFF.md).
 
 ---
 
@@ -36,7 +46,7 @@ En la Puna (Salta, Jujuy, Catamarca), la minería de litio y las comunidades com
 | Pregunta | Respuesta de Vega |
 |---|---|
 | **1. ¿Quién desconfía de quién?** | Las **comunidades** desconfían de los datos de la **minera**. Los **compradores de litio** necesitan verificar a su **proveedor** sin depender de lo que este declare. El **Estado** no tiene datos propios. Son al menos 3 partes con intereses opuestos. |
-| **2. ¿Qué evento dispara algo on-chain?** | **Cada medición satelital** queda registrada (dato + hash + fecha + fuente). **Cuando el NDWI de un humedal cae por debajo del umbral, el contrato emite una alerta pública** (`WaterAlert`) que nadie puede borrar. |
+| **2. ¿Qué evento dispara algo on-chain?** | Cuando el relayer autorizado publica una medición aprobada, el contrato registra dato + hash + fecha + fuente. Si el humedal tiene un umbral configurado y el NDWI queda por debajo, emite `WaterAlert`. |
 | **3. ¿Qué pasa si el dato miente?** | La fuente es **pública y reproducible**: cualquiera puede descargar la misma escena Sentinel-2 y recalcular el NDWI. On-chain guardamos el **hash del dato y el ID de la escena**, así que una manipulación se detecta al recalcular. En el MVP publica **un relayer**. En la siguiente etapa publican **varios relayers** de distintas partes (comunidad, universidad, empresa) y el contrato toma la **mediana**, o se usa una **L1 propia** donde esas partes son los validadores. |
 | **4. ¿Quién paga o cobra, y cuánto?** | Pagan las **mineras** que exportan litio, con una **suscripción por salar monitoreado** (orientativo: USD 500–2.000/mes por salar), para mostrar cumplimiento ante compradores y bancos. Pagan también los **compradores y traders** por acceso a reportes verificados de sus proveedores. **Comunidades, ONGs y el Estado** acceden gratis al mapa público, y eso es lo que le da credibilidad al dato. |
 
