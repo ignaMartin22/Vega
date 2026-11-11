@@ -6,14 +6,24 @@
  *   npm run relay                     -> publica (requiere PRIVATE_KEY y dirección del contrato)
  *   MEASUREMENTS=sample-data/measurements.json npm run relay   -> usa los datos reales
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Contract, JsonRpcProvider, Wallet } from "ethers";
 import { FUJI, VEGA_REGISTRY_ABI, VEGA_REGISTRY_ADDRESS, hashRecord, txUrl, type HashedMeasurement } from "@vega/shared";
+import { mergeMeasurements, mergePublishedMeasurements, type PublishedMeasurement } from "./outputs.js";
 
 const ROOT = new URL("../../", import.meta.url);
+const PUBLISHED_URL = new URL("sample-data/published.json", ROOT);
+const RECORDS_URL = new URL("frontend/public/records.json", ROOT);
 const dryRun = process.argv.includes("--dry-run");
 const file = process.env.MEASUREMENTS ?? "sample-data/measurements.mock.json";
 const records: HashedMeasurement[] = JSON.parse(readFileSync(new URL(file, ROOT), "utf8"));
+
+function readArray<T>(url: URL): T[] {
+  if (!existsSync(url)) return [];
+  const value: unknown = JSON.parse(readFileSync(url, "utf8"));
+  if (!Array.isArray(value)) throw new Error(`Se esperaba un array JSON en ${url.pathname}`);
+  return value as T[];
+}
 
 // 1. Validar que cada dataHash corresponde a su registro (nunca publicar algo que no verifica)
 for (const r of records) {
@@ -32,7 +42,9 @@ const provider = new JsonRpcProvider(process.env.FUJI_RPC_URL ?? FUJI.rpcUrl);
 const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
 const registry = new Contract(address, VEGA_REGISTRY_ABI, wallet);
 
-const published: (HashedMeasurement & { txHash: string })[] = [];
+const previousPublished = readArray<PublishedMeasurement>(PUBLISHED_URL);
+const previousRecords = readArray<HashedMeasurement>(RECORDS_URL);
+const published: PublishedMeasurement[] = [];
 for (const r of records) {
   if (await registry.isRecorded(r.dataHash)) {
     console.log(`= ya sellado ${r.sceneId}`);
@@ -44,7 +56,10 @@ for (const r of records) {
   published.push({ ...r, txHash: tx.hash });
 }
 
-// TODO(Relayer): mergear con publicaciones anteriores en vez de sobrescribir y
-// servir records.json para el frontend (copiar a frontend/public/ o HTTP desde Oracle Cloud).
-writeFileSync(new URL("sample-data/published.json", ROOT), JSON.stringify(published, null, 2) + "\n");
-console.log(`Publicadas ${published.length} mediciones nuevas -> sample-data/published.json`);
+const allPublished = mergePublishedMeasurements(previousPublished, published);
+const allRecords = mergeMeasurements(previousRecords, records);
+mkdirSync(new URL("frontend/public/", ROOT), { recursive: true });
+writeFileSync(PUBLISHED_URL, JSON.stringify(allPublished, null, 2) + "\n");
+writeFileSync(RECORDS_URL, JSON.stringify(allRecords, null, 2) + "\n");
+console.log(`Publicaciones: ${allPublished.length} total (${published.length} nuevas) -> sample-data/published.json`);
+console.log(`Registros de verificación: ${allRecords.length} -> frontend/public/records.json`);
