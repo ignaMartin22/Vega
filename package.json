@@ -8,7 +8,7 @@
     "mock": "npm run gen-mock -w @vega/shared",
     "dev:front": "npm run dev -w @vega/frontend",
     "ndwi": "npm run start -w @vega/processing",
-    "relay": "npm run start -w @vega/relayer",
+    "relay": "npm run start -w @vega/relayer --",
     "typecheck": "npm run typecheck --workspaces --if-present"
   },
   "devDependencies": {
