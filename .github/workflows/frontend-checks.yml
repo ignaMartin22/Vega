@@ -1,6 +1,9 @@
 name: Frontend checks
 
 on:
+  push:
+    branches:
+      - feat/frontend-geojson-wetland-import-latest
   pull_request:
     paths:
       - "frontend/**"
