@@ -114,21 +114,39 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 
 ## Slide 6 · Modelo de negocio (≈20 s)
 
-**Título:** Dato ambiental verificable para exportar litio
+**Título:** La minera paga por un dato que no puede tocar
 
-**En pantalla:**
+**Idea central:** la minera le paga a Vega para que un tercero neutral (el satélite y la blockchain) certifique que cuida el agua, porque a ella sola nadie le cree.
+
+**En pantalla (flujo de valor):**
+
+```
+Comprador de litio exige pruebas ambientales
+        ▼
+La minera no puede usar su propio estudio (nadie le cree)
+        ▼
+Paga a Vega → dato satelital sellado que NO puede modificar
+        ▼
+Lo muestra a compradores, bancos e inversores → vende y se financia mejor
+```
 
 | Quién | Qué obtiene | Paga |
 |---|---|---|
-| **Mineras exportadoras** | Prueba de cuidado del agua ante compradores y bancos | Suscripción por salar monitoreado (orientativo: **USD 500–2.000/mes**) |
-| **Compradores y traders de litio** | Debida diligencia ambiental de sus proveedores | Acceso a reportes verificados |
-| **Bancos y fondos** | Monitoreo creíble para evaluar el riesgo de un proyecto | Reportes |
-| **Comunidades, ONGs y Estado** | Control independiente | **Gratis**, y eso es lo que le da credibilidad al dato |
+| **Mineras exportadoras** | Monitoreo continuo, alertas y reportes verificables para mostrar a compradores y bancos | **Suscripción por salar** (orientativo: USD 500–2.000/mes) |
+| **Compradores de litio** (automotrices, baterías) | Reportes de todos sus proveedores en un lugar, para su debida diligencia | Acceso a reportes |
+| **Comunidades, ONGs y Estado** | Control independiente con el mismo dato | **Gratis** |
+
+**Por qué es gratis para las comunidades:** si solo la minera viera el dato, sería otro dato de la minera. Que lo vean también quienes desconfían de ella es lo que lo vuelve creíble. **Lo gratuito es parte del producto que compra la minera.**
+
+**Costos casi nulos:**
+- Imágenes Sentinel-2: gratis
+- Sellar una medición en Avalanche: ≈ 0,0013 AVAX (fracción de centavo de dólar)
+- Un salar entero on-chain: **pocos dólares al año**
 
 **Posicionamiento:** *"dato ambiental verificable para exportar litio"*, no *"vigilar a la minera"*.
 
 **Se dice:**
-> "No vendemos vigilancia: vendemos confianza. A la minera le conviene pagar porque le abre mercados que piden pruebas ambientales. Y el acceso gratuito para las comunidades es justamente lo que hace que el dato valga."
+> "No vendemos vigilancia: vendemos confianza. La minera necesita demostrarles a sus compradores que cuida el agua, y su propio estudio no le alcanza. Con Vega paga por un dato que no puede modificar: puede dejar de pagar, pero no puede borrar lo que ya quedó registrado. Las comunidades acceden gratis, y eso es justamente lo que le da valor a lo que compra la minera. Y operarlo cuesta casi nada: sellar un salar entero en Avalanche sale unos pocos dólares al año."
 
 ---
 
@@ -161,8 +179,12 @@ Sentinel-2 L2A  ──►  Relayer  ──►  VegaRegistry (Avalanche)  ──�
 | ¿Por qué Avalanche? | Transacciones baratas y rápidas en la C-Chain (compatible con EVM), y la posibilidad de una **L1 propia** con validadores elegidos: comunidades, universidad y empresa. Encaja con la gobernanza multiparte. |
 | ¿Y las nubes? | Usamos la capa de clasificación de escena (SCL) de Sentinel-2 para descartar nubes y sombras, y filtramos escenas con poca nubosidad (una por mes). |
 | ¿El NDWI alcanza para medir el agua? | Es un indicador de **superficie con agua** en humedales, no de agua subterránea. Sirve como alerta temprana pública. La siguiente etapa suma sensores en campo y otras fuentes. |
-| ¿Cuánto cuesta operar on-chain? | El deploy del contrato en Fuji costó menos de 0,0001 AVAX de prueba. `[[COSTO_POR_MEDICION]]`: medirlo con la serie real (I3). |
+| ¿Cuánto cuesta operar on-chain? | Cada medición consume ≈170.000 de gas: **≈ 0,0013 AVAX en mainnet** (precio del gas de 7,5 gwei, medido el 11/11/2026; varía). Un salar con 3 humedales y una escena por mes son 36 tx al año, **≈ 0,05 AVAX al año**. Incluso midiendo en cada pasada del satélite (~220 tx al año) son ≈ 0,3 AVAX. |
 | ¿Por qué pagaría una minera? | Los compradores (automotrices, fabricantes de baterías) exigen cada vez más debida diligencia ambiental. Un dato que nadie puede manipular le sirve más que un estudio propio. |
+| Si la minera paga, ¿no controla el dato? | No. Puede pagar o dejar de pagar, pero **no puede modificar ni borrar** lo registrado: cada medición queda en la cadena para siempre y cualquiera la puede recalcular desde la imagen pública. Esa es la diferencia con contratar una consultora. |
+| ¿Y si la minera deja de pagar? | Se deja de monitorear ese salar *desde Vega*, pero el historial queda on-chain. El código y los datos son públicos: una ONG, una universidad o el Estado pueden seguir corriendo el relayer. Con varios relayers (próxima etapa), el monitoreo no depende de un solo pagador. |
+| ¿A una minera le conviene que la monitoreen? | Si cuida el agua, sí: es una **ventaja comercial** frente a otras mineras que no pueden demostrarlo. Por eso el posicionamiento es "dato verificable para exportar litio" y no "vigilar a la minera". |
+| ¿De dónde salen los precios? | Son **orientativos**, una hipótesis a validar con clientes. Igual, como el costo operativo es casi nulo, el modelo funciona incluso con precios mucho más bajos. |
 | ¿Qué pasa con la privacidad o los datos de las comunidades? | No se registran datos personales: solo índices satelitales de superficie, que ya son públicos. |
 
 ---
