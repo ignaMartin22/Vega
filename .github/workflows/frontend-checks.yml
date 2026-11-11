@@ -1,0 +1,36 @@
+name: Frontend checks
+
+on:
+  push:
+    branches: [feat/frontend-geojson-analysis-flow]
+    paths:
+      - "frontend/**"
+      - "shared/**"
+      - "sample-data/wetlands.geojson"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/frontend-checks.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "shared/**"
+      - "sample-data/wetlands.geojson"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/frontend-checks.yml"
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck -w @vega/frontend
+      - run: npm test -w @vega/frontend
+      - run: npm run build -w @vega/frontend
