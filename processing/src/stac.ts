@@ -1,4 +1,4 @@
-import { bbox, type WetlandFeature } from "./wetlands.js";
+import type { WetlandFeature } from "./wetlands.js";
 
 export const STAC_URL = "https://earth-search.aws.element84.com/v1";
 export interface StacAsset {
@@ -30,7 +30,7 @@ export async function searchScenes(f: WetlandFeature, from: string, to: string, 
     throw new Error("Intervalo STAC inválido");
   }
   const body = {
-    collections: ["sentinel-2-l2a"], bbox: bbox(f), datetime: `${from}/${to}`,
+    collections: ["sentinel-2-l2a"], intersects: f.geometry, datetime: `${from}/${to}`,
     query: { "eo:cloud_cover": { lt: maxCloud } },
     sortby: [{ field: "properties.datetime", direction: "asc" }], limit: 100,
   };
