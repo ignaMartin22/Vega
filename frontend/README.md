@@ -18,4 +18,4 @@ La pantalla permite cargar un `FeatureCollection` propio para previsualizar los 
 - Propiedades obligatorias: `wetlandId` (entero único), `name`, `salar` y `thresholdNdwi` (NDWI × 10.000).
 - Límite de importación: 100 humedales y 5 MB.
 
-La importación valida la estructura y muestra los polígonos en el mapa. No genera ni reutiliza mediciones: los resultados Sentinel-2/NDWI para una geometría importada deben procesarse antes de aparecer asociados a ella.
+La importación valida la estructura, coordenadas, cierre y superficie de los anillos, y encuadra automáticamente todos los polígonos en el mapa. No genera ni reutiliza mediciones: los resultados Sentinel-2/NDWI para una geometría importada deben procesarse antes de aparecer asociados a ella.\n\nPara ejecutar las pruebas del importador desde `frontend/`: `npm test`.
