@@ -17,7 +17,7 @@
 - [x] `forge test -vv` en verde
 - [x] **Deploy temprano en Fuji** con `script/Deploy.s.sol` (plan B: Remix + Core Wallet)
 - [x] Completar `shared/deployments/fuji.json` (`address`, `deployBlock`, `deployTx`, `publisher`) y pushear → **Hito H1**
-- [ ] Verificar el contrato en el explorer (opcional, suma en la demo)
+- [x] Verificar el contrato en el explorer (opcional, suma en la demo)
 
 ## Día 2 · Jue 12
 
