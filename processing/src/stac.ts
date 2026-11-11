@@ -2,7 +2,7 @@
  * Búsqueda de escenas Sentinel-2 L2A en Earth Search (sin API key).
  * Responsable: Integrante 2 (Datos).
  */
-import { bbox, type WetlandFeature } from "./wetlands.js";
+import type { WetlandFeature } from "./wetlands.js";
 
 export const STAC_URL = "https://earth-search.aws.element84.com/v1";
 
