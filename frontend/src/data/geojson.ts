@@ -7,9 +7,19 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function ringHasArea(ring: number[][]): boolean {
+  let twiceArea = 0;
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const [x1, y1] = ring[index];
+    const [x2, y2] = ring[index + 1];
+    twiceArea += x1 * y2 - x2 * y1;
+  }
+  return Math.abs(twiceArea) > Number.EPSILON;
+}
+
 /**
- * Parses the GeoJSON profile accepted by Vega.
- * Coordinates must follow RFC 7946 order (longitude, latitude) in WGS84.
+ * Parses Vega's GeoJSON profile. Coordinates follow RFC 7946:
+ * WGS84 longitude/latitude order (EPSG:4326).
  */
 export function parseWetlandsGeoJson(input: string): WetlandFeature[] {
   let parsed: unknown;
@@ -79,26 +89,28 @@ export function parseWetlandsGeoJson(input: string): WetlandFeature[] {
       if (totalPoints > MAX_RING_POINTS) {
         throw new Error(`${label}: el polígono supera el límite de ${MAX_RING_POINTS} posiciones.`);
       }
+
       for (const position of ring) {
         if (
           !Array.isArray(position) ||
           position.length < 2 ||
-          typeof position[0] !== "number" ||
-          typeof position[1] !== "number" ||
-          !Number.isFinite(position[0]) ||
-          !Number.isFinite(position[1]) ||
+          position.some((coordinate) => typeof coordinate !== "number" || !Number.isFinite(coordinate)) ||
           position[0] < -180 ||
           position[0] > 180 ||
           position[1] < -90 ||
           position[1] > 90
         ) {
-          throw new Error(`${label}: coordenadas inválidas; se esperan [longitud, latitud] en EPSG:4326.`);
+          throw new Error(`${label}: coordenadas inválidas; se esperan posiciones [longitud, latitud] en EPSG:4326.`);
         }
       }
+
       const first = ring[0] as number[];
       const last = ring[ring.length - 1] as number[];
       if (first[0] !== last[0] || first[1] !== last[1]) {
         throw new Error(`${label}: cada anillo debe estar cerrado (primera y última coordenada iguales).`);
+      }
+      if (!ringHasArea(ring as number[][])) {
+        throw new Error(`${label}: el anillo tiene área cero y no delimita una superficie.`);
       }
     }
 
