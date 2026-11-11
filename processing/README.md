@@ -1,8 +1,8 @@
 ﻿# Datos satelitales de Vega (I2)
 
-> **Estado:** existe un primer servicio HTTP de análisis, con trabajos persistidos, tres años móviles e imágenes por área. Catálogo piloto parcial; todavía no completa el alcance regional ni el mosaico del salar. Ver [API.md](API.md) para usarlo y sus límites. El período fijo y los archivos históricos descriptos abajo pertenecen a la prueba técnica anterior.
+> **Estado actual I2:** servicio HTTP con catálogo regional IGN/USGS, selección/dibujo Polygon/MultiPolygon, trabajos persistidos, tres años móviles, mosaicos entre teselas/UTM e imágenes de evolución por humedal y salar completo. Uso e integración en [API.md](API.md); fuentes en [CATALOG.md](CATALOG.md). Los comandos y el período fijo siguientes corresponden a la prueba CLI histórica, que se conserva como herramienta y respaldo.
 
-El pipeline consulta Sentinel-2 L2A en Earth Search, calcula NDWI sobre cada AOI y escribe `HashedMeasurement[]` con `withHash()` de `@vega/shared`. No cambia el esquema ni las interfaces del equipo.
+El pipeline consulta Sentinel-2 L2A en Earth Search, calcula NDWI sobre cada AOI y escribe `HashedMeasurement[]` con `withHash()` de `@vega/shared`. Conserva los campos y las firmas ABI; el método v2 del servicio está documentado en `docs/INTERFACES.md`.
 
 **Entrega generada:** 105 mediciones reales de 2023-2025 (35/34/36 por AOI), con hashes validados por el relayer. Se excluyeron tres meses sin cobertura válida suficiente; están identificados en el informe. Ver [HANDOFF.md](HANDOFF.md).
 
@@ -60,7 +60,7 @@ Earth Search tiene reportes públicos de inconsistencias históricas en sus offs
 - `sample-data/measurements.csv` y `measurements.summary.json`: exportación y resumen auditados por `npm run summary -w @vega/processing`.
 - `sample-data/validation/sentinel-aois.png`: color real Sentinel-2 con AOI 1 rojo, 2 cian y 3 amarillo; metadatos en el JSON acompañante. Se reproduce con `npm run preview -w @vega/processing`.
 
-El esquema v1 no incluye el hash de la geometría dentro del registro sellado: el SHA-256 del polígono vive en el informe auxiliar. Conservar y versionar juntos GeoJSON, STAC, registros e informe. Vincular criptográficamente esa geometría al registro requiere una futura versión coordinada del esquema.
+Los registros CLI históricos v1 no incluyen el hash de la geometría dentro del registro sellado: está en el informe auxiliar. Las solicitudes HTTP nuevas usan `mosaic-v2;geometry-sha256=...`, incorporando ese compromiso dentro del hash canónico sin cambiar las firmas ABI. Conservar también geometrías, escenas e informes para reproducir el cálculo.
 
 ## Interpretación y entrega al equipo
 

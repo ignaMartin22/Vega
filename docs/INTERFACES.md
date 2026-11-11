@@ -41,6 +41,14 @@ interface MeasurementRecord {
 interface HashedMeasurement extends MeasurementRecord { dataHash: `0x${string}` }
 ```
 
+### Extensión compatible I2: mosaicos v2
+
+`method` admite además `NDWI=(B03-B08)/(B03+B08);mean;SCL-masked;mosaic-v2`, con el sufijo `;geometry-sha256=<hash>` en solicitudes nuevas. Ese sufijo compromete criptográficamente la geometría canónica dentro del hash del registro. Se conserva la forma de los campos, el esquema v1, el hash canónico y las firmas ABI. Los datos anteriores mantienen su método v1 o la versión inicial de mosaicos sin sufijo. El método nuevo usa una grilla UTM WGS84 fija de 10 m por componente, vecino próximo y máscara SCL; cada píxel aporta una sola vez aunque varias teselas lo cubran.
+
+Para una escena, `sceneId` sigue siendo su ID STAC. Para varias teselas de la misma adquisición, `sceneId` es `mosaic:<idSTAC>+<idSTAC>...`, ordenado por ID; no es un único item STAC. El manifiesto de procedencia conserva los items, calibración, geometría y sus fechas. La adquisición admite hasta 15 minutos entre teselas de la misma pasada, sin mezclar satélites/fechas. `timestamp` es el inicio; `cloudCover` es el máximo de nubosidad declarado entre las teselas. Frontend/I3 deben leer `sceneIds` del resultado auxiliar para enlazar las escenas individuales y no construir un enlace STAC con el identificador compuesto.
+
+Esta ampliación no registra nuevos umbrales ni publica automáticamente los IDs de áreas dibujadas. I1/I3 coordinan su revisión; el servicio marca `reviewRequired:true`.
+
 ## 2. Hash (`shared/src/hash.ts`)
 
 ```

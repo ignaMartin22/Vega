@@ -1,0 +1,53 @@
+{
+  "retrievedAt": "2026-11-11T18:56:14.040Z",
+  "salars": 135,
+  "wetlands": 506,
+  "scope": [
+    "salta",
+    "jujuy",
+    "catamarca"
+  ],
+  "coverage": "Completo respecto de las capas/snapshot consultados; catálogo de cuerpos de agua, no inventario exhaustivo de humedales ecológicos. Vegas/bofedales sin polígono de agua pueden seleccionarse por dibujo.",
+  "monitoringBufferKm": 15,
+  "monitoringZoneDefinition": "Rectángulo envolvente ampliado aproximadamente 15 km; no cuenca hidrográfica",
+  "provinceSimplificationDegrees": 0.0001,
+  "deduplication": "Partes IGN contiguas del mismo nombre; prioridad IGN frente a USGS por nombre/sinónimos y solapamiento de bbox o IoU >0.8",
+  "sources": [
+    {
+      "url": "https://wms.ign.gob.ar/geoserver/ows",
+      "layers": [
+        "ign:provincia",
+        "ign:edafologia_salina",
+        "ign:areas_de_aguas_continentales_intermitente",
+        "ign:areas_de_aguas_continentales_perenne"
+      ]
+    },
+    {
+      "url": "https://services9.arcgis.com/DeJOjr4rpbUboAGS/ArcGIS/rest/services/Salares/FeatureServer/0",
+      "original": "https://doi.org/10.5066/P9RLUH4F",
+      "note": "Distribución ArcGIS; endpoint original ScienceBase rechazó descarga 403; se conserva procedencia y snapshot."
+    }
+  ],
+  "snapshots": [
+    {
+      "name": "ign-provinces-region",
+      "sha256": "c7ef4e9ac19cc21047234e955a7b8649440023a588630b3b99e436464cdc2fbf"
+    },
+    {
+      "name": "ign-salinas",
+      "sha256": "d7a1217603339143a7fb675893a7b1457ee74b5285e127099f9a2667fdfd47f2"
+    },
+    {
+      "name": "usgs-salars",
+      "sha256": "1390c43e752aee084030260ea47a7ca539a2336f0c5ae40c28e8e09bd4a15e8c"
+    },
+    {
+      "name": "ign-areas_de_aguas_continentales_intermitente",
+      "sha256": "16ae7d8bd8a6114002da69f85c8463064dbf19c329a974711e54901ec037a78d"
+    },
+    {
+      "name": "ign-areas_de_aguas_continentales_perenne",
+      "sha256": "8fed861b156efd2c92b3967297dc135dfbeeccb417c764b627fa5bcb974c74d4"
+    }
+  ]
+}

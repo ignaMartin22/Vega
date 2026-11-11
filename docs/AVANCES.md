@@ -101,3 +101,23 @@ Primero, en tu rama: `git pull origin main`.
 - **Para recuperar la dirección pública desde la clave:** `cast wallet address --private-key <clave>`.
 - **Simulá antes de transmitir:** `forge script` sin `--broadcast` estima el gas y no gasta nada.
 - **El `deployBlock` que escribe `Deploy.s.sol` sale de la simulación** y puede estar unos bloques antes. El valor correcto sale del recibo: `cast receipt <tx> blockNumber`.
+
+---
+
+## I2 · Motor satelital y API listos para integración (11/11)
+
+Rama: `i2/sdd-sentinel2`. Instrucciones: [`processing/API.md`](../processing/API.md), [`processing/HANDOFF.md`](../processing/HANDOFF.md).
+
+- Servicio HTTP: catálogo → solicitud → progreso → resultado → PNG de evolución. Selección por catálogo y dibujo de Polygon/MultiPolygon con agujeros.
+- Catálogo regional IGN/USGS: 135 entradas de salares/salinas y 506 cuerpos de agua; salares compartidos conservan un ID. Cobertura respecto de fuentes/snapshot, no inventario ecológico exhaustivo.
+- Tres años móviles, máscara SCL, NDWI sobre grilla de 10 m, composición de teselas/zonas UTM y solapamientos sin doble conteo. Imágenes por humedal y salar completo.
+- Método `mosaic-v2;geometry-sha256=...`: conserva el array/ABI y añade compromiso geométrico en el hash. Para `sceneId=mosaic:...`, resolver IDs STAC individuales mediante procedencia. Ver actualización de `INTERFACES.md`.
+- Doce pruebas de software y casos Sentinel-2 reales: Olaroz/Jujuy y Arizaro/Salta; tres años en Hombre Muerto con 35 mediciones válidas y 36 mosaicos de salar, un hueco de calidad explícito. El dry-run de I3 valida los hashes.
+
+**Sol:** ejecutar `npm run serve -w @vega/processing` (API en 8787). Consumir `salarFrames` para la reproducción del salar y `frames` por humedal; PNG con bbox EPSG:4326, fecha y escenas. Cliente de ejemplo en `processing/src/client.ts`.
+
+**Gaby:** configuración, persistencia, CORS, descarga del array `/measurements` y Dockerfile en `processing/`. Docker no está instalado en este entorno: validar imagen en la infraestructura de I3. El servicio no transmite transacciones; nuevos IDs requieren revisar umbrales con Igna.
+
+**Demo:** una corrida fría de tres años tardó unos 18 minutos aquí. Prepararla antes y reutilizar el resultado/caché con su fecha visible. `npm run export -w @vega/processing -- <id> <directorio>` genera respaldo offline de registros e imágenes. No presentar una caché como análisis recién ejecutado.
+
+Quedan en sus responsables la integración UI, el despliegue y la publicación. Los límites cartográficos y umbrales ambientales siguen sujetos a revisión; NDWI no demuestra volumen, contaminación ni causalidad minera.

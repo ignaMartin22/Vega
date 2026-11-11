@@ -1,5 +1,16 @@
 # Entrega I2 → I3/I4
 
+## Entrega actual del sistema
+
+- Sol: `npm run serve -w @vega/processing`; consumir catálogo → POST análisis → estado → resultado. `salarFrames` es la secuencia del salar completo; `frames`, la de cada humedal. Cada PNG tiene bbox/fecha/escenas. Adaptador sin dependencias Node en `src/client.ts`.
+- Gaby: API por defecto en 8787, datos en directorio persistente, configuración en [API.md](API.md) y Dockerfile entregado. Descargar `/measurements` para el relayer; I2 no publica transacciones. Docker no está instalado en el entorno de desarrollo: la imagen queda para validación en el entorno de I3.
+- Igna: nuevos IDs de catálogo/dibujo no heredan los umbrales 1/2/3. Revisar configuración; `reviewRequired:true` permanece explícito.
+- Compatibilidad: método v2 y geometría comprometida en `method`; misma forma del registro/hash/ABI. `sceneId` compuesto se resuelve a IDs STAC individuales mediante procedencia.
+- Fuentes/snapshot y reconstrucción en [CATALOG.md](CATALOG.md). El catálogo de agua no pretende inventariar todas las vegas/bofedales; el usuario puede dibujar áreas no listadas.
+- Respaldo offline de un trabajo terminado: `npm run export -w @vega/processing -- <analysisId> <directorio>`. Identifica fechas/caché como históricas, nunca como cálculo en vivo.
+
+## Prueba histórica anterior
+
 > **Prueba técnica previa al SDD.** Los archivos siguientes son datos experimentales reutilizables; no completan la entrega funcional desde la web. El alcance vigente incluye catálogo + dibujo, evolución por imágenes y tres años móviles: ver [SDD](../docs/SDD-I2-SENTINEL2.md). Para el primer servicio HTTP local ya implementado y sus límites, ver [API.md](API.md); el flujo completo con el frontend aún debe integrarse.
 
 Serie real del Salar del Hombre Muerto, Sentinel-2 L2A, enero 2023–diciembre 2025. No se modificaron las interfaces de `shared/`, el contrato, el relayer ni el frontend.

@@ -4,7 +4,7 @@
 **Entregás:** serie histórica real de NDWI (`HashedMeasurement[]`) para 2 o 3 humedales de un salar real
 **No dependés de nadie:** no necesitás el contrato ni el relayer. Tu salida es un archivo JSON con formato fijo.
 
-**Avance:** motor por comando y 105 registros experimentales de 2023–2025; primer servicio HTTP local con trabajos persistidos, período móvil de tres años y PNG por AOI. Nueve pruebas y una solicitud HTTP real con dry-run de I3 aprobados. **Falta completar:** catálogo regional, geometrías complejas/mosaicos del salar e integración frontend/infraestructura. Uso y límites en [`processing/API.md`](../../processing/API.md); checklist SDD en [specs/i2-web-analysis/tasks.md](../specs/i2-web-analysis/tasks.md). La prueba histórica se documenta en [`processing/HANDOFF.md`](../../processing/HANDOFF.md).
+**Entrega técnica I2 implementada:** servicio HTTP, catálogo regional de fuentes IGN/USGS, selección/dibujo Polygon/MultiPolygon, mosaicos entre teselas/UTM e imágenes de evolución del salar completo. Doce pruebas de software aprobadas; casos reales en las tres provincias y corrida de tres años (35 mediciones válidas y 36 mosaicos del salar; un hueco de calidad). Uso en [`processing/API.md`](../../processing/API.md); protocolo/evidencia en [specs/i2-web-analysis/tasks.md](../specs/i2-web-analysis/tasks.md). Pendientes de integración: UI de Sol, despliegue/publicación de Gaby y revisión de IDs/umbrales con Igna. La validación ambiental experta no se declara realizada por pruebas de software.
 
 ## Día 1 · Mié 11
 

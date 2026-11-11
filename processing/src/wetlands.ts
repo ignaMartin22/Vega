@@ -2,6 +2,7 @@ import { readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { WetlandProperties } from "@vega/shared";
+import { extent, type Surface } from "./geometry.js";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_FEATURES = 100;
@@ -9,7 +10,7 @@ const MAX_FEATURES = 100;
 export interface WetlandFeature {
   type: "Feature";
   properties: WetlandProperties;
-  geometry: { type: "Polygon"; coordinates: number[][][] };
+  geometry: Surface;
 }
 
 interface GeoJsonFeatureCollection {
@@ -62,6 +63,31 @@ function validateRing(value: unknown, featureIndex: number, ringIndex: number): 
   return ring;
 }
 
+/** Un anillo es un array de posiciones [lon, lat]; sirve para detectar anidamiento incorrecto. */
+const isRingShape = (value: unknown) =>
+  Array.isArray(value) && value.length > 0 && value.every((p) => Array.isArray(p) && p.every((n) => typeof n === "number"));
+
+function validatePolygon(value: unknown, featureIndex: number, kind: string): number[][][] {
+  if (!Array.isArray(value) || value.length === 0 || !value.every(isRingShape)) {
+    throw new Error(`Feature ${featureIndex}: geometría ${kind} mal formada`);
+  }
+  return value.map((ring, ringIndex) => validateRing(ring, featureIndex, ringIndex));
+}
+
+function validateGeometry(geometry: Record<string, unknown>, index: number): Surface {
+  if (geometry.type === "Polygon") {
+    return { type: "Polygon", coordinates: validatePolygon(geometry.coordinates, index, "Polygon") };
+  }
+  if (geometry.type === "MultiPolygon") {
+    const parts = geometry.coordinates;
+    if (!Array.isArray(parts) || parts.length === 0) {
+      throw new Error(`Feature ${index}: geometría MultiPolygon mal formada`);
+    }
+    return { type: "MultiPolygon", coordinates: parts.map((part) => validatePolygon(part, index, "MultiPolygon")) };
+  }
+  throw new Error(`Feature ${index}: solo se admiten geometrías Polygon o MultiPolygon`);
+}
+
 export function parseWetlandsGeoJson(raw: string): WetlandFeature[] {
   let parsed: unknown;
   try {
@@ -101,15 +127,10 @@ export function parseWetlandsGeoJson(raw: string): WetlandFeature[] {
       throw new Error(`Feature ${index}: thresholdNdwi debe ser un entero entre -10000 y 10000`);
     }
 
-    const geometry = candidate.geometry;
-    if (geometry.type !== "Polygon" || !Array.isArray(geometry.coordinates) || geometry.coordinates.length === 0) {
-      throw new Error(`Feature ${index}: solo se admiten geometrías Polygon con anillos`);
-    }
-    const coordinates = geometry.coordinates.map((ring, ringIndex) => validateRing(ring, index, ringIndex));
     return {
       type: "Feature",
       properties: { wetlandId: wetlandId as number, name, salar, thresholdNdwi: thresholdNdwi as number },
-      geometry: { type: "Polygon", coordinates },
+      geometry: validateGeometry(candidate.geometry, index),
     };
   });
 }
@@ -127,10 +148,7 @@ export function loadWetlands(filePath = process.env.WETLANDS_GEOJSON): WetlandFe
   return parseWetlandsGeoJson(readFileSync(path, "utf8"));
 }
 
-/** [minLon, minLat, maxLon, maxLat] del polígono, para diagnósticos o filtros espaciales. */
+/** [minLon, minLat, maxLon, maxLat] de la geometría (Polygon o MultiPolygon). */
 export function bbox(f: WetlandFeature): [number, number, number, number] {
-  const pts = f.geometry.coordinates[0];
-  const lons = pts.map((p) => p[0]);
-  const lats = pts.map((p) => p[1]);
-  return [Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)];
+  return extent(f.geometry);
 }

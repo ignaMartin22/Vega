@@ -1,0 +1,24 @@
+{
+  "analysisId": "61736f62-46ca-4cdf-ba53-b797c1b4f8df",
+  "status": "partial",
+  "from": "2023-11-11T18:39:21.143Z",
+  "to": "2026-11-11T18:39:21.143Z",
+  "createdAt": "2026-11-11T18:39:21.189Z",
+  "completedAt": "2026-11-11T18:57:02.135Z",
+  "durationSeconds": 1060.946,
+  "measurements": 35,
+  "areaFrames": 35,
+  "salarFrames": 36,
+  "issues": [
+    {
+      "wetlandId": 1,
+      "window": 15,
+      "code": "insufficient_data",
+      "message": "Sin adquisición con al menos 50% de píxeles válidos"
+    }
+  ],
+  "allHashesValid": true,
+  "geometryChecked": true,
+  "imagesChecked": true,
+  "scope": "Datos reales Sentinel-2; prueba de software, no diagnóstico ambiental ni publicación blockchain"
+}

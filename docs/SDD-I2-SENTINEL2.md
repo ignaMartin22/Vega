@@ -2,6 +2,8 @@
 
 **Estado: decisiones de experiencia y período confirmadas; especificación de implementación v1.**
 
+Actualización de implementación I2: servicio HTTP, catálogo regional, dibujo de geometrías complejas, mosaicos NDWI y fotogramas del salar completo implementados. Evidencia en [specs/i2-web-analysis/tasks.md](specs/i2-web-analysis/tasks.md) y operación en [processing/API.md](../processing/API.md). Sol conserva la UI/reproducción y Gaby el despliegue/publicación. Los límites científicos/cartográficos se mantienen explícitos.
+
 Repositorio: https://github.com/ignaMartin22/Vega  
 Rama local: `i2/sdd-sentinel2`  
 Base actualizada: `main`, commit `f147464` (11/11/2026).
@@ -99,7 +101,7 @@ La solicitud desde la web forma parte del alcance confirmado. La ejecución peri
 - Un salar tiene una identidad estable y `provinces: []`; puede pertenecer a varias provincias sin duplicarse por filtro.
 - La selección territorial se basa en su geometría y las jurisdicciones documentadas, no únicamente en el centroide.
 - Elegir una provincia no recorta ni divide un salar compartido. Se conserva su identidad y se indican sus provincias.
-- El usuario puede elegir cualquier salar del ámbito solicitado y seleccionar humedales existentes o dibujar un área. Un catálogo parcial de demo debe declarar su cobertura y no presentarse como exhaustivo. La fuente y cobertura del catálogo aún deben verificarse; es una tarea necesaria para completar el alcance regional.
+- El usuario puede elegir un salar del catálogo regional y seleccionar cuerpos de agua cartografiados o dibujar un área. Se implementó el snapshot regional IGN/USGS y su cobertura verificable. Es completo respecto de las capas consultadas, no un inventario ecológico exhaustivo; las áreas no cartografiadas se dibujan dentro del ámbito permitido.
 - Los polígonos de salar y de humedal son conceptos distintos: no se promedia automáticamente toda la costra salina como si fuera un único humedal.
 - El diseño de catálogo admite geometrías Polygon/MultiPolygon. Si una zona cruza teselas Sentinel-2, el motor debe combinar cobertura compatible o informar el caso no soportado; no descartar silenciosamente parte de la zona.
 - En una composición de teselas se debe controlar fecha/adquisición, grilla, máscara y solapamientos. No se contarán dos veces píxeles del solapamiento ni se presentarán fechas mezcladas como una sola captura.
