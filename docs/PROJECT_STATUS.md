@@ -2,13 +2,14 @@
 
 **Corte de revisión:** 11 de noviembre de 2026  
 **Repositorio:** `ignaMartin22/Vega` · rama principal `main`  
-**Commit revisado:** `0347e428cc73bac67c0e0125944bf2e2d419f490`
+**Commit revisado:** `171c211f4c4def3504f291d37075f93fbb104c51`
 
 Este documento distingue código integrado, evidencia disponible y tareas que todavía requieren ejecución o validación humana. No debe interpretarse como certificación científica ni como confirmación de despliegue.
 
 ## 1. Integración GitHub
 
-- PR #5, #6, #7, #8, #9, #10, #11 y #12 están integrados en `main`.
+- PR #5–#13 están integrados en `main`.
+- Después de PR #5 se integró una actualización adicional de `i2/sdd-sentinel2` para resolver la combinación de catálogo regional, MultiPolygon y mosaicos con los cambios de GeoJSON ya presentes.
 - PR #1–#4 se cerraron como reemplazados o ya cubiertos.
 - PR #11 actualizó el handoff y este estado integral; PR #12 incorporó el pitch y guion de demo.
 - En la revisión del 11/11 no había PR abiertos ni issues abiertos.
@@ -19,12 +20,12 @@ Este documento distingue código integrado, evidencia disponible y tareas que to
 | Componente | Estado comprobado | Qué falta |
 |---|---|---|
 | Contrato VegaRegistry | Desplegado en Avalanche Fuji; dirección en `shared/deployments/fuji.json` | Confirmar publicaciones reales de la serie elegida y guardar evidencia de eventos |
-| Procesamiento Sentinel-2 | Motor NDWI, STAC paginado, selección mensual, servicio HTTP, entrada GeoJSON configurable (Polygon/MultiPolygon), mosaicos multi-tesela y catálogo regional Salta/Jujuy/Catamarca (135 salares, 506 cuerpos de agua; ver `processing/API.md`) | Validación científica externa |
+| Procesamiento Sentinel-2 | Motor NDWI, STAC paginado, selección mensual, servicio HTTP, catálogo de 135 salares/salinas y 506 cuerpos de agua cartografiados, Polygon/MultiPolygon con agujeros y mosaicos de teselas de una misma adquisición | Validación científica externa y comparación numérica independiente |
 | Frontend | Landing, mapa, importación GeoJSON, panel de análisis, visualización de resultados y verificación on-chain | Prueba manual integral y datos reales publicados |
-| GeoJSON personalizado | Validación en frontend/API y búsqueda STAC por geometría | No certifica la identidad territorial del polígono |
+| GeoJSON personalizado | API acepta Polygon/MultiPolygon con agujeros; el importador web sigue limitado a Polygon simple con un anillo y hasta 501 posiciones | Alinear la interfaz con la API si se necesita cargar geometrías complejas; validar identidad territorial |
 | Relayer | Valida hashes, evita duplicados y puede generar archivos de publicación y verificación | Ejecutar publicación aprobada; no se encontraron artefactos versionados de publicaciones reales |
 | Infraestructura | Instrucciones locales documentadas | Backend y frontend públicos aún no confirmados |
-| Pitch y demo | Mensaje del proyecto y arquitectura documentados en README | Deck final y video demo pendientes |
+| Pitch y demo | Narrativa, guion y checklist en `docs/PITCH_DEMO.md`; presentación PowerPoint generada como archivo de trabajo fuera del repositorio | Revisar con el equipo y grabar el video demo |
 
 ## 3. Evidencia de datos disponible
 
@@ -43,7 +44,7 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 1. **Geometría del piloto:** las tres áreas del GeoJSON actual son AOI digitalizadas, no límites oficiales. Para usar Tocomar/Olaroz se debe obtener la geometría original del inventario científico y validarla; el punto y la superficie publicados no alcanzan para reconstruir un polígono.
 2. **Umbrales:** el contrato conserva 1500/1000/1200 (NDWI × 10.000). Son valores de integración, no umbrales ecológicos calibrados. La vegetación puede dar NDWI negativo sin indicar degradación.
 3. **Publicación:** antes de transmitir, I1/I2/I3 deben aprobar geometría, wetlandId, umbral, conjunto de registros y wallet publicadora. No publicar mocks ni datos de otra geometría.
-4. **Cobertura:** desde la integración de `i2/sdd-sentinel2` el servicio compone mosaicos de teselas de una misma adquisición y el catálogo cubre las capas IGN/USGS de las tres provincias. "Completo" significa completo respecto de esas capas, no un inventario ecológico exhaustivo de humedales.
+4. **Cobertura:** el servicio compone teselas de una misma adquisición/plataforma dentro de 15 minutos, usa una grilla UTM de 10 m y exige 50% de centros de píxel válidos por AOI. El catálogo contiene 135 salares/salinas y 506 cuerpos de agua de las capas IGN/USGS consultadas. "Completo" significa completo respecto de esas fuentes, no un inventario ecológico exhaustivo de humedales.
 5. **Infraestructura:** el backend HTTP necesita almacenamiento persistente, HTTPS y CORS. El hosting estático del frontend no despliega el backend.
 6. **Prueba de producto:** no hay evidencia de una prueba manual de extremo a extremo en navegador ni de un deployment público.
 
@@ -56,6 +57,7 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 - [ ] Terminal 2: `npm run dev:front`.
 - [ ] Abrir `http://localhost:5173` y recorrer importación GeoJSON → análisis → progreso → resultados → imágenes.
 - [ ] Probar también errores: GeoJSON inválido, sin cobertura, sin datos y API apagada.
+- [ ] Comprobar la diferencia de alcance entre el importador web (Polygon simple, un anillo, 501 posiciones) y la API (Polygon/MultiPolygon, agujeros, 20.000 coordenadas).
 - [ ] Guardar capturas y anotar cualquier error reproducible.
 
 ### P1 — Validar dato y área
@@ -79,7 +81,8 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 - [ ] Desplegar backend persistente con HTTPS y CORS restringido.
 - [ ] Configurar `VITE_ANALYSIS_API_URL` con la URL real antes del build.
 - [ ] Crear preview del frontend y probarlo desde otro dispositivo/red.
-- [ ] Preparar pitch de 5–7 diapositivas y video de 1–3 minutos con una transacción verificable.
+- [x] Preparar narrativa, pitch y guion de demo en `docs/PITCH_DEMO.md`.
+- [ ] Revisar la presentación de trabajo con el equipo y grabar video de 1–3 minutos; mostrar una transacción verificable solo si existe.
 - [ ] Actualizar README con URLs reales y atribución.
 
 ## 6. Materiales para la entrega
