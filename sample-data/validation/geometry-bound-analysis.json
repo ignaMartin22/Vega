@@ -1,0 +1,17 @@
+{
+  "analysisId": "92848a30-bd32-4642-b34d-008c58a41e59",
+  "status": "succeeded",
+  "from": "2024-04-01T00:00:00.000Z",
+  "to": "2024-05-01T00:00:00.000Z",
+  "createdAt": "2026-11-11T19:01:10.178Z",
+  "completedAt": "2026-11-11T19:01:45.233Z",
+  "durationSeconds": 35.055,
+  "measurements": 1,
+  "areaFrames": 1,
+  "salarFrames": 1,
+  "issues": [],
+  "allHashesValid": true,
+  "geometryChecked": true,
+  "imagesChecked": true,
+  "scope": "Datos reales Sentinel-2; prueba de software, no diagnóstico ambiental ni publicación blockchain"
+}

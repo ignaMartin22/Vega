@@ -9,3 +9,7 @@
 7. Probar HTTP y persistencia con un motor inyectable; probar cálculo real por separado y realizar una solicitud acotada con Sentinel-2 real.
 
 No modificar `shared/`, `frontend/`, `relayer/` ni el contrato desplegado. La publicación de este servicio es trabajo coordinado con Gaby.
+
+## Extensión ejecutada en el segundo incremento
+
+Se amplió de forma compatible el campo `method` de `shared/` para identificar mosaicos v2 y comprometer la geometría canónica dentro del hash; se documentó previamente en la conversación y en `docs/INTERFACES.md`. No se cambiaron firmas ABI, frontend ni relayer. El catálogo se deriva de fuentes versionadas; los píxeles se muestrean sobre grilla única y la secuencia completa usa teselas de la misma adquisición. Pruebas cubren solapamientos, agujeros, varias partes y distintas zonas UTM.

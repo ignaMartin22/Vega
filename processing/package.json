@@ -10,9 +10,14 @@
     "test": "tsx --test test/*.test.ts",
     "preview": "tsx src/preview.ts",
     "summary": "tsx src/summarize.ts",
-    "serve": "tsx src/serve.ts"
+    "serve": "tsx src/serve.ts",
+    "catalog:build": "tsx scripts/build-catalog.ts",
+    "catalog:refresh": "tsx scripts/refresh-catalog.ts",
+    "export": "tsx scripts/export-analysis.ts",
+    "verify-output": "tsx scripts/verify-output.ts"
   },
   "dependencies": {
+    "@turf/turf": "^7.4.0",
     "@vega/shared": "*",
     "geotiff": "^2.1.3",
     "pngjs": "^7.0.0",

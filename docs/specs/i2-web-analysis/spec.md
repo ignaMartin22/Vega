@@ -1,6 +1,6 @@
 # Especificación · I2 análisis web
 
-Flujo SDD de este incremento: especificación → plan → tareas → implementación → pruebas. No se instaló ni se declara utilizado un framework SDD externo.
+Flujo SDD: especificación → plan → tareas → implementación → pruebas. No se instaló ni se declara utilizado un framework SDD externo. El segundo incremento completa el motor/API de I2; la integración visual y publicación/despliegue permanecen con I4/I3.
 
 ## Requisitos del producto
 
@@ -17,9 +17,9 @@ Flujo SDD de este incremento: especificación → plan → tareas → implementa
 
 Servicio local ejecutable, trabajos persistidos, cálculo parametrizado de tres años, humedales piloto y dibujo Polygon validado contra el salar piloto, imágenes PNG por AOI y contrato HTTP verificable. El motor anterior sigue utilizable por CLI.
 
-## Lo que este incremento NO cierra
+## Segundo incremento: cierre de I2
 
-Catálogo exhaustivo de Salta/Jujuy/Catamarca; validación de geometrías MultiPolygon y composición de teselas; secuencia del salar completo cuando requiere mosaicos; UI de Sol; despliegue e integración de publicación de Gaby; calibración ambiental de umbrales. El alcance final exige resolverlos; no se reemplaza por este incremento.
+Implementados: catálogo regional respecto de fuentes IGN/USGS, límites provinciales y salares compartidos, MultiPolygon/agujeros, identidad geométrica canónica, grilla NDWI entre teselas/zonas UTM sin solapamientos, imágenes del salar completo, caché explícita, cliente de integración y exportación offline. La cobertura no es un inventario ecológico exhaustivo ni una validación ambiental experta. UI de Sol y despliegue/publicación de Gaby son responsabilidades externas a I2.
 
 ## Criterios verificables
 

@@ -4,7 +4,11 @@
  */
 
 /** Versión del método de cálculo; si cambia el algoritmo, sube la versión. */
-export const NDWI_METHOD = "NDWI=(B03-B08)/(B03+B08);mean;SCL-masked;v1" as const;
+export const NDWI_METHOD =
+  "NDWI=(B03-B08)/(B03+B08);mean;SCL-masked;v1" as const;
+/** Grilla UTM fija a 10 m, vecino próximo, teselas de la misma adquisición; procedencia en manifiesto. */
+export const NDWI_MOSAIC_METHOD =
+  "NDWI=(B03-B08)/(B03+B08);mean;SCL-masked;mosaic-v2" as const;
 export const RECORD_SCHEMA = "vega.measurement.v1" as const;
 
 /** Factor de escala: el NDWI se guarda como entero (ndwi * 10_000). */
@@ -13,13 +17,16 @@ export const NDWI_SCALE = 10_000;
 /** Registro off-chain completo. Su hash (dataHash) es lo que se sella on-chain. */
 export interface MeasurementRecord {
   schema: typeof RECORD_SCHEMA;
-  wetlandId: number;     // uint32, coincide con properties.wetlandId del GeoJSON
-  ndwi: number;          // entero, NDWI × 10_000 (ej. 0.2345 -> 2345)
-  sceneId: string;       // ID de item STAC, ej. "S2B_19KGA_20240115_0_L2A"
-  timestamp: number;     // unix segundos de ADQUISICIÓN de la escena (no de publicación)
-  cloudCover: number;    // eo:cloud_cover de la escena (0-100)
-  validPixels: number;   // píxeles válidos usados en el promedio
-  method: typeof NDWI_METHOD;
+  wetlandId: number; // uint32, coincide con properties.wetlandId del GeoJSON
+  ndwi: number; // entero, NDWI × 10_000 (ej. 0.2345 -> 2345)
+  sceneId: string; // ID de item STAC, ej. "S2B_19KGA_20240115_0_L2A"
+  timestamp: number; // unix segundos de ADQUISICIÓN de la escena (no de publicación)
+  cloudCover: number; // eo:cloud_cover de la escena (0-100)
+  validPixels: number; // píxeles válidos usados en el promedio
+  method:
+    | typeof NDWI_METHOD
+    | typeof NDWI_MOSAIC_METHOD
+    | `${typeof NDWI_MOSAIC_METHOD};geometry-sha256=${string}`;
 }
 
 /** Registro + hash, tal como lo produce processing/ y consume relayer/ y frontend/. */
