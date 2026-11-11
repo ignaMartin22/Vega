@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { parseWetlandsGeoJson } from "../data/geojson";
 import type { WetlandFeature } from "../data/source";
 
@@ -12,7 +12,7 @@ export function GeoJsonUploader({ onLoad }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
     setMessage(null);
