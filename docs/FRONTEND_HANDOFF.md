@@ -1,4 +1,4 @@
-# Entrega y operación del frontend de Vega
+# SATY — entrega y operación del frontend
 
 ## Estado de integración (11/11/2026)
 
