@@ -14,7 +14,8 @@
     "catalog:build": "tsx scripts/build-catalog.ts",
     "catalog:refresh": "tsx scripts/refresh-catalog.ts",
     "export": "tsx scripts/export-analysis.ts",
-    "verify-output": "tsx scripts/verify-output.ts"
+    "verify-output": "tsx scripts/verify-output.ts",
+    "audit:pilot": "tsx scripts/audit-pilot.ts"
   },
   "dependencies": {
     "@turf/turf": "^7.4.0",
