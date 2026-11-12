@@ -4,6 +4,53 @@ Registro de lo terminado y de lo que cada integrante puede hacer a partir de eso
 
 ---
 
+## 📍 Estado al jue 12/11 (mañana) y lo que falta para la entrega
+
+**Entrega: vie 13/11, 09:00.** Lo que no esté en `main` y probado esta noche no entra.
+
+### ✅ Terminado e integrado en `main`
+| Parte | Estado |
+|---|---|
+| I1 · Contrato | `VegaRegistry` desplegado y verificado en Fuji (`0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`), umbrales 1→1500, 2→1000, 3→1200, wallet de I3 autorizada como publisher. 16 tests. |
+| I2 · Datos | 105 mediciones reales 2023-2025 de 3 AOI de Hombre Muerto (`sample-data/measurements.json`). API de análisis con catálogo regional (135 salares, 506 cuerpos de agua), Polygon/MultiPolygon, mosaicos de teselas. 16 tests. |
+| I3 · Relayer | Publica con validación de hash, deduplicación, reintentos, `--only-wetland`/`--limit` y genera `records.json`. 6 tests. |
+| I4 · Frontend | Landing, mapa, gráfico NDWI, botón Verificar, panel de análisis GeoJSON. Build OK, 4 tests. |
+| Pitch | Guion por slide en `docs/PITCH.md`; guion de demo en `docs/PITCH_DEMO.md`. |
+
+### 🚨 Bloqueante n.º 1: nada publicado en Fuji todavía
+Al 12/11 el contrato tiene **0 mediciones** en los humedales 1, 2 y 3 (`getMeasurements`), y no existen `sample-data/published.json` ni `frontend/public/records.json`. Sin eso no hay `WaterAlert`, ni modo `chain`, ni Verificar ✔ en el video.
+
+### Qué hace cada uno hoy (en este orden)
+**I3 · Relayer (lo primero del día)**
+- [ ] Prueba corta: `npm run relay -- --only-wetland 2 --limit 3`; confirmar las tx en Snowscan.
+- [ ] Publicar las 105 mediciones y commitear `sample-data/published.json` y `frontend/public/records.json` (no la `.env`).
+- [ ] Pasar a I4 e I1 el `txHash` de al menos un `WaterAlert` (para `[[TX_WATERALERT]]` del pitch y el video).
+- [ ] Deploy del frontend en Vercel con `VITE_DATA_SOURCE=chain`, junto con I4.
+
+**I4 · Frontend**: checklist completo en la sección *"🎯 Frontend"* más abajo. Mínimo para el video:
+- [ ] Modo `chain` contra Fuji con los datos de I3.
+- [ ] Panel "Alertas públicas" (`WaterAlert`), tabla de mediciones con Verificar por fila, toggle "simular dato alterado".
+- [ ] Footer: "Copernicus Sentinel data 2023-2025" y link al contrato en Snowscan.
+- [ ] Grabar el video demo (1 a 3 min) con la tx de respaldo a mano.
+
+**I2 · Datos**
+- [ ] Confirmar con I3 qué serie se publica (las 105 de `measurements.json`) y que los umbrales siguen siendo 1500/1000/1200, o pedirle a I1 un `setThreshold`.
+- [ ] Captura del gráfico NDWI real para `[[GRAFICO_NDWI]]` del pitch.
+- [ ] Si se muestra el análisis GeoJSON en la demo: dejar un resultado precalculado (`npm run export -w @vega/processing`) porque una corrida de 3 años tarda unos 18 min.
+
+**I1 · Contratos e integración**
+- [ ] Revisar y mergear los PR del día (I3 y I4) y verificar las mediciones on-chain después de la publicación.
+- [ ] `setThreshold` si I2 lo pide.
+- [ ] README final: link al video, al deck y a la URL de Vercel; completar `[[EQUIPO]]`, `[[CAPTURA_MAPA]]` y `[[VIDEO]]` en el pitch.
+- [ ] Deck con el manual de marca, siguiendo `docs/PITCH.md`.
+
+### Cierre (jue a la noche)
+- [ ] Ensayo del pitch completo con el video.
+- [ ] Prueba desde otro dispositivo de la URL de Vercel.
+- [ ] Checklist de entrega del README tildado.
+
+---
+
 ## ✅ I1 · Contratos: hito H1 completo (mié 11/11)
 
 ### Qué está hecho

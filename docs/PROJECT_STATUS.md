@@ -1,6 +1,6 @@
 # Estado integral del proyecto Vega
 
-**Corte de revisión:** 11 de noviembre de 2026  
+**Corte de revisión:** 12 de noviembre de 2026 (mañana)  
 **Repositorio:** `ignaMartin22/Vega` · rama principal `main`  
 **Commit revisado:** `171c211f4c4def3504f291d37075f93fbb104c51`
 
@@ -12,7 +12,7 @@ Este documento distingue código integrado, evidencia disponible y tareas que to
 - Después de PR #5 se integró una actualización adicional de `i2/sdd-sentinel2` para resolver la combinación de catálogo regional, MultiPolygon y mosaicos con los cambios de GeoJSON ya presentes.
 - PR #1–#4 se cerraron como reemplazados o ya cubiertos.
 - PR #11 actualizó el handoff y este estado integral; PR #12 incorporó el pitch y guion de demo.
-- En la revisión del 11/11 no había PR abiertos ni issues abiertos.
+- En la revisión del 12/11 no había PR abiertos. On-chain: `getMeasurements` devuelve 0 mediciones para los humedales 1, 2 y 3; la publicación sigue pendiente (ver `docs/AVANCES.md`).
 - Los checks de CI asociados a las integraciones de frontend y processing finalizaron correctamente. La aprobación del CI no sustituye una prueba manual del producto.
 
 ## 2. Componentes disponibles

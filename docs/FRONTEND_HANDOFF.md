@@ -30,28 +30,28 @@ Requisitos: Node.js 22 y npm. Desde la raíz:
 
 Terminal 1 — servicio de análisis:
 
-\`\`\`bash
+```bash
 npm ci
 npm run serve -w @vega/processing
-\`\`\`
+```
 
 Terminal 2 — frontend:
 
-\`\`\`bash
+```bash
 npm run dev:front
-\`\`\`
+```
 
 Vite suele escuchar en http://localhost:5173; la API local en http://127.0.0.1:8787. La interfaz usa por defecto esa API local. Para cambiarla, definir VITE_ANALYSIS_API_URL en el entorno de Vite o en el .env de la raíz (frontend/vite.config.ts usa envDir: "..").
 
 Comprobaciones desde la raíz:
 
-\`\`\`bash
+```bash
 npm run typecheck
 npm test -w @vega/frontend
 npm test -w @vega/processing
 npm test -w @vega/relayer
 npm run build -w @vega/frontend
-\`\`\`
+```
 
 El CI de los PR integrados ejecutó sus comprobaciones correspondientes; eso no sustituye una prueba manual del flujo completo en navegador.
 
