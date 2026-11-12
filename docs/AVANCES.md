@@ -4,7 +4,7 @@ Registro de lo terminado y de lo que cada integrante puede hacer a partir de eso
 
 ---
 
-## 📍 Estado al jue 12/11 (mañana) y lo que falta para la entrega
+## 📍 Estado al jue 12/11 y lo que falta para la entrega
 
 **Entrega: vie 13/11, 09:00.** Lo que no esté en `main` y probado esta noche no entra.
 
@@ -17,14 +17,14 @@ Registro de lo terminado y de lo que cada integrante puede hacer a partir de eso
 | I4 · Frontend | Landing, mapa, gráfico NDWI, botón Verificar, panel de análisis GeoJSON. Build OK, 4 tests. |
 | Pitch | Guion por slide en `docs/PITCH.md`; guion de demo en `docs/PITCH_DEMO.md`. |
 
-### 🚨 Bloqueante n.º 1: nada publicado en Fuji todavía
-Al 12/11 el contrato tiene **0 mediciones** en los humedales 1, 2 y 3 (`getMeasurements`), y no existen `sample-data/published.json` ni `frontend/public/records.json`. Sin eso no hay `WaterAlert`, ni modo `chain`, ni Verificar ✔ en el video.
+### 🚨 Bloqueante n.º 1: verificar la publicación declarada por I3
+La auditoría read-only de I2 del 12/11/2026 consultó el bloque Fuji `60953369`: `alreadyRecorded: 0` y `simulated: 105`. Posteriormente, la rama `i3/relayer` incorporó `sample-data/published.json` con 105 `txHash` únicos y `frontend/public/records.json` con 105 registros sin `txHash`. Esto es evidencia de archivos generados, no confirmación independiente de transacciones. Antes de mostrar el modo `chain`, I1/I3 deben comprobar recibos exitosos, eventos `MeasurementRecorded`, campos de `getMeasurements` y al menos un `WaterAlert` real. No afirmar todavía que la serie está publicada.
 
 ### Qué hace cada uno hoy (en este orden)
 **I3 · Relayer (lo primero del día)**
 - [ ] Prueba corta: `npm run relay -- --only-wetland 2 --limit 3`; confirmar las tx en Snowscan.
-- [ ] Publicar las 105 mediciones y commitear `sample-data/published.json` y `frontend/public/records.json` (no la `.env`).
-- [ ] Pasar a I4 e I1 el `txHash` de al menos un `WaterAlert` (para `[[TX_WATERALERT]]` del pitch y el video).
+- [ ] Verificar los 105 `txHash` ya declarados en `i3/relayer`: recibos, contrato destino, emisor, eventos y campos. Si hay diferencias, corregir los artefactos a partir de recibos reales; nunca inventar ni completar hashes.
+- [ ] Pasar a I4 e I1 el `txHash` de un `WaterAlert` solo después de confirmar el recibo y decodificar el evento.
 - [ ] Deploy del frontend en Vercel con `VITE_DATA_SOURCE=chain`, junto con I4.
 
 **I4 · Frontend**: checklist completo en la sección *"🎯 Frontend"* más abajo. Mínimo para el video:
@@ -176,7 +176,7 @@ Quedan en sus responsables la integración UI, el despliegue y la publicación. 
 **Ya hecho:** landing completa · mapa Leaflet con los 3 humedales y autoencuadre · gráfico NDWI con línea de umbral · botón Verificar (hash más campos on-chain, con estados ✔/✘/sin registro/error) · panel de análisis GeoJSON contra la API de I2 (`:8787`) con fotogramas Sentinel-2 · `source.ts` con modos `mock` y `chain`.
 
 ### Bloqueante (antes que todo)
-- [ ] **I3:** publicar las 105 mediciones reales (`sample-data/measurements.json`) en Fuji y versionar `frontend/public/records.json`. Sin ese archivo, Verificar devuelve "sin registro".
+- [ ] **I3/I1:** contrastar los 105 txHash declarados con Fuji y verificar `getMeasurements` por ID. No confundir `published.json` con confirmación on-chain.
 - [ ] **I3:** pasar a I4 el `txHash` de al menos un `WaterAlert` real (es el `[[TX_WATERALERT]]` del pitch).
 
 ### I4 · Mínimo para el video
