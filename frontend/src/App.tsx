@@ -15,7 +15,7 @@ function LandingIntro() {
   return (
     <>
       <header className="site-header">
-        <a className="brand-lockup" href="#inicio" aria-label="Vega, inicio"><Mark /><span><strong>VEGA</strong><small>AGUA · CIENCIA · TERRITORIO</small></span></a>
+        <a className="brand-lockup" href="#inicio" aria-label="SATY, inicio"><Mark /><span><strong>SATY</strong><small>AGUA · CIENCIA · TERRITORIO</small></span></a>
         <nav className="main-nav" aria-label="Navegación principal">
           <a href="#plataforma">Plataforma</a><a href="#metodo">Cómo funciona</a><a href="#piloto">Área piloto</a>
         </nav>
@@ -42,7 +42,7 @@ function LandingIntro() {
 
         <section className="intro-strip" id="plataforma">
           <p className="eyebrow">UNA NUEVA MIRADA AL TERRITORIO</p>
-          <p className="intro-statement">Los humedales de altura son ecosistemas esenciales. <strong>Vega transforma observaciones satelitales en información ambiental trazable</strong> para acompañar su estudio y seguimiento.</p>
+          <p className="intro-statement">Los humedales de altura son ecosistemas esenciales. <strong>SATY transforma observaciones satelitales en información ambiental trazable</strong> para acompañar su estudio y seguimiento.</p>
         </section>
 
         <section className="feature-section">
@@ -128,7 +128,7 @@ export default function App() {
           {usingUploadedGeoJson ? <div className="empty-series"><strong>Área importada</strong><p>La vista previa no reutiliza mediciones mock ni registros on-chain de otras geometrías. Consultá los resultados del trabajo de análisis en el panel superior.</p></div> : <><NdwiChart series={series} threshold={wetland?.properties.thresholdNdwi ?? 0}/>{last && <VerifyButton measurement={last} />}{!last && <p className="empty-series">No hay mediciones disponibles para esta área en la fuente seleccionada.</p>}</>}
         </section>
       </main>
-      <footer className="site-footer"><a className="footer-brand" href="#inicio">VEGA</a><span>Monitoreo ambiental · Puna argentina</span><span>Evidencia ambiental trazable · Resultados sujetos a validación científica.</span><a href="#inicio">Volver arriba ↑</a></footer>
+      <footer className="site-footer"><a className="footer-brand" href="#inicio">SATY</a><span>Monitoreo ambiental · Puna argentina</span><span>Evidencia ambiental trazable · Resultados sujetos a validación científica.</span><a href="#inicio">Volver arriba ↑</a></footer>
     </>
   );
 }
