@@ -1,18 +1,19 @@
-# Estado integral del proyecto Vega
+# Estado integral del proyecto SATY
 
-**Corte de revisión:** 12 de noviembre de 2026 (mañana)  
+**Corte de revisión:** 12 de noviembre de 2026  
 **Repositorio:** `ignaMartin22/Vega` · rama principal `main`  
-**Commit revisado:** `171c211f4c4def3504f291d37075f93fbb104c51`
+**Commit revisado:** `059f716ffdef86069fc1414e502c7860ff393df3`
 
 Este documento distingue código integrado, evidencia disponible y tareas que todavía requieren ejecución o validación humana. No debe interpretarse como certificación científica ni como confirmación de despliegue.
 
 ## 1. Integración GitHub
 
-- PR #5–#13 están integrados en `main`.
+- PR #5–#16 están integrados en `main`; PR #16 establece SATY como identidad pública. El CI de frontend de PR #16 finalizó correctamente.
 - Después de PR #5 se integró una actualización adicional de `i2/sdd-sentinel2` para resolver la combinación de catálogo regional, MultiPolygon y mosaicos con los cambios de GeoJSON ya presentes.
 - PR #1–#4 se cerraron como reemplazados o ya cubiertos.
 - PR #11 actualizó el handoff y este estado integral; PR #12 incorporó el pitch y guion de demo.
-- En la revisión del 12/11 no había PR abiertos. On-chain: `getMeasurements` devuelve 0 mediciones para los humedales 1, 2 y 3; la publicación sigue pendiente (ver `docs/AVANCES.md`).
+- PR #16 integró el cambio de marca SATY. El nombre técnico del repo, los workspaces `@vega/*` y el contrato `VegaRegistry` se conservan durante la transición.
+- La auditoría de I2 del 12/11/2026 (bloque Fuji 60953369) simuló 105 publicaciones pendientes y encontró 0 ya registradas en ese bloque. Después apareció un artefacto de I3 con 105 `txHash`; esos hashes aún requieren verificación independiente contra recibos y estado del contrato. Ver `docs/CHAIN_PUBLICATION_AUDIT.md`.
 - Los checks de CI asociados a las integraciones de frontend y processing finalizaron correctamente. La aprobación del CI no sustituye una prueba manual del producto.
 
 ## 2. Componentes disponibles
@@ -23,7 +24,7 @@ Este documento distingue código integrado, evidencia disponible y tareas que to
 | Procesamiento Sentinel-2 | Motor NDWI, STAC paginado, selección mensual, servicio HTTP, catálogo de 135 salares/salinas y 506 cuerpos de agua cartografiados, Polygon/MultiPolygon con agujeros y mosaicos de teselas de una misma adquisición | Validación científica externa y comparación numérica independiente |
 | Frontend | Landing, mapa, importación GeoJSON, panel de análisis, visualización de resultados y verificación on-chain | Prueba manual integral y datos reales publicados |
 | GeoJSON personalizado | API acepta Polygon/MultiPolygon con agujeros; el importador web sigue limitado a Polygon simple con un anillo y hasta 501 posiciones | Alinear la interfaz con la API si se necesita cargar geometrías complejas; validar identidad territorial |
-| Relayer | Valida hashes, evita duplicados y puede generar archivos de publicación y verificación | Ejecutar publicación aprobada; no se encontraron artefactos versionados de publicaciones reales |
+| Relayer | Valida hashes, evita duplicados y genera archivos de publicación/verificación | Hay artefactos en `i3/relayer`, aún fuera de `main`; contienen 105 txHash declarados que deben contrastarse con recibos y `getMeasurements` antes de considerarlos evidencia |
 | Infraestructura | Instrucciones locales documentadas | Backend y frontend públicos aún no confirmados |
 | Pitch y demo | Narrativa, guion y checklist en `docs/PITCH_DEMO.md`; presentación PowerPoint generada como archivo de trabajo fuera del repositorio | Revisar con el equipo y grabar el video demo |
 
@@ -37,7 +38,7 @@ El repositorio contiene:
 - `sample-data/validation/sentinel-aois.png`: inspección visual de los AOI sobre Sentinel-2.
 - `sample-data/wetlands.geojson`: tres AOI piloto, expresamente no oficiales.
 
-El handoff de I2 informa hashes válidos y tres meses sin observación aceptable. Los registros son evidencia experimental reproducible, pero no se debe decir que están publicados en Avalanche: al revisar `main` no existían `sample-data/published.json` ni `frontend/public/records.json`.
+El handoff de I2 informa hashes válidos y tres meses sin observación aceptable. I2 agregó una auditoría reproducible que recalculó 105/105 registros y simuló su envío en Fuji, sin transmitir. I3 incorporó en su rama `sample-data/published.json` (105 registros, 105 txHash únicos) y `frontend/public/records.json` (105 registros, sin txHash). Los archivos no están integrados en `main` y los txHash no han sido verificados aquí contra recibos/eventos; no afirmar todavía que la serie esté publicada y verificada.
 
 ## 4. Bloqueos que requieren decisión del equipo
 
@@ -73,7 +74,7 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 - [ ] Confirmar wallet publicadora, permisos, IDs y umbrales en Fuji.
 - [ ] Publicar una muestra pequeña aprobada; revisar cada transacción y evento.
 - [ ] Confirmar al menos un `WaterAlert` real y guardar la URL del explorer.
-- [ ] Versionar `sample-data/published.json` y `frontend/public/records.json` con datos reales, sin secretos.
+- [ ] Integrar los artefactos de I3 solo después de verificar recibos, eventos y coincidencia completa; conservar `sample-data/published.json` y `frontend/public/records.json` sin secretos.
 
 ### P3 — Preview y presentación
 
@@ -86,6 +87,9 @@ El handoff de I2 informa hashes válidos y tres meses sin observación aceptable
 - [ ] Actualizar README con URLs reales y atribución.
 
 ## 6. Materiales para la entrega
+
+- `docs/BRAND_SATY.md`: identidad pública SATY y reglas de transición técnica.
+- `docs/CHAIN_PUBLICATION_AUDIT.md`: diferencias entre preflight I2 y artefactos I3; checklist de verificación.
 
 - `docs/PITCH_DEMO.md`: narrativa de seis diapositivas, guion de video y checklist de grabación.
 - `docs/FRONTEND_HANDOFF.md`: operación local, despliegue y límites del frontend.
