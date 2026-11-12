@@ -1,4 +1,4 @@
-# 💧 Vega
+# 💧 SATY
 
 **Evidencia satelital del agua de la Puna, con trazabilidad verificable.**
 Confianza verificable entre la minería, las comunidades y los compradores de litio.
@@ -9,7 +9,7 @@ Confianza verificable entre la minería, las comunidades y los compradores de li
 
 ---
 
-## 🧭 El problema: "X le pasa a Y"
+## 🧭 El problema: información ambiental confiable
 
 > **A las comunidades de la Puna y a los compradores de litio les falta un dato confiable sobre el agua: hoy los estudios de impacto los genera la propia minera.**
 
@@ -23,7 +23,7 @@ En la Puna (Salta, Jujuy, Catamarca), la minería de litio y las comunidades com
 
 ## 💡 La solución
 
-**Vega** permite analizar humedales y áreas de interés de la Puna con imágenes Sentinel-2, conservar la procedencia de cada observación y preparar registros verificables. Una medición solo pasa a **Avalanche** después de la revisión y autorización del equipo; la blockchain aporta integridad y trazabilidad al registro publicado, no certifica por sí sola la interpretación ambiental.
+**SATY** permite analizar humedales y áreas de interés de la Puna con imágenes Sentinel-2, conservar la procedencia de cada observación y preparar registros verificables. Una medición solo pasa a **Avalanche** después de la revisión y autorización del equipo; la blockchain aporta integridad y trazabilidad al registro publicado, no certifica por sí sola la interpretación ambiental.
 
 1. **Medimos.** El servicio consulta escenas **Sentinel-2** (Copernicus), aplica controles de calidad y calcula **NDWI** sobre las áreas seleccionadas.
 2. **Revisamos y preparamos.** Cada observación conserva escena, fecha, cobertura, método y hash. Las geometrías y los umbrales requieren validación antes de publicar.
@@ -43,7 +43,7 @@ Para operar localmente y conocer los límites, consultar [estado integral](docs/
 
 ## ✅ Test de blockchain (las 4 preguntas)
 
-| Pregunta | Respuesta de Vega |
+| Pregunta | Respuesta de SATY |
 |---|---|
 | **1. ¿Quién desconfía de quién?** | Las **comunidades** desconfían de los datos de la **minera**. Los **compradores de litio** necesitan verificar a su **proveedor** sin depender de lo que este declare. El **Estado** no tiene datos propios. Son al menos 3 partes con intereses opuestos. |
 | **2. ¿Qué evento dispara algo on-chain?** | Cuando el relayer autorizado publica una medición aprobada, el contrato registra dato + hash + fecha + fuente. Si el humedal tiene un umbral configurado y el NDWI queda por debajo, emite `WaterAlert`. |
@@ -218,7 +218,7 @@ cp .env.example .env # variables (PRIVATE_KEY solo de la cuenta del hackathon)
 
 ## 🎤 Pitch en una frase
 
-> **"Vega: datos satelitales del agua de la Puna que nadie puede modificar. Confianza verificable entre la minería, las comunidades y los compradores."**
+> **"SATY: datos satelitales del agua de la Puna, con evidencia reproducible y trazabilidad verificable."**
 
 ---
 
@@ -239,4 +239,4 @@ cp .env.example .env # variables (PRIVATE_KEY solo de la cuenta del hackathon)
 
 ---
 
-*Vega: por las vegas de la Puna, los humedales que queremos cuidar.*
+*SATY: observar el agua, comprender el territorio y cuidar los humedales de la Puna.*

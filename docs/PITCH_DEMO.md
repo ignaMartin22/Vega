@@ -1,4 +1,4 @@
-# Pitch y guion de demo de Vega
+# Pitch y guion de demo de SATY
 
 Documento de trabajo para el equipo. Está redactado para presentar lo que existe hoy sin convertir hipótesis, AOI exploratorios o mediciones no publicadas en resultados certificados.
 
@@ -12,7 +12,7 @@ Documento de trabajo para el equipo. Está redactado para presentar lo que exist
 - La información ambiental suele estar dispersa y no siempre es sencilla de reproducir o contrastar.
 - Comunidades, organismos públicos, empresas y compradores necesitan una base común de evidencia.
 
-**Frase oral:** “Vega busca que una observación ambiental pueda ser revisada por cualquiera, no que dependa de confiar ciegamente en quien la presenta”.
+**Frase oral:** “SATY busca que una observación ambiental pueda ser revisada por cualquiera, no que dependa de confiar ciegamente en quien la presenta”.
 
 **Visual:** mapa de la Puna con salares y humedales; usar una cartografía atribuida y no marcar polígonos exploratorios como límites oficiales.
 
@@ -21,7 +21,7 @@ Documento de trabajo para el equipo. Está redactado para presentar lo que exist
 **Título:** Una cadena de evidencia abierta y auditable
 
 1. Sentinel-2 aporta imágenes públicas.
-2. Vega localiza escenas y calcula NDWI sobre áreas de interés.
+2. SATY localiza escenas y calcula NDWI sobre áreas de interés.
 3. Cada registro conserva fecha, escena, método y hash.
 4. Una vez aprobado por el equipo, el relayer puede registrar el hash y los campos acordados en Avalanche Fuji.
 5. El frontend permite consultar y contrastar el registro.
@@ -81,7 +81,7 @@ Documento de trabajo para el equipo. Está redactado para presentar lo que exist
 - Desplegar backend y frontend con infraestructura autorizada.
 - Ampliar gradualmente el catálogo y resolver mosaicos de teselas para AOI que crucen coberturas.
 
-**Cierre:** “Vega convierte observaciones satelitales abiertas en evidencia ambiental reproducible y, cuando se aprueba, verificable en una red pública”.
+**Cierre:** “SATY convierte observaciones satelitales abiertas en evidencia ambiental reproducible y, cuando se aprueba, verificable en una red pública”.
 
 ---
 
@@ -92,7 +92,7 @@ Grabar solo después de comprobar localmente el flujo de interfaz. Si el backend
 | Tiempo | Imagen | Narración / acción |
 |---|---|---|
 | 0:00–0:15 | Mapa de la Puna y vista de un humedal | “En los salares altoandinos, contar con información ambiental reproducible es clave para comunidades, organismos y actividades productivas”. |
-| 0:15–0:30 | Landing de Vega | “Vega conecta imágenes públicas Sentinel-2, análisis NDWI y una capa de trazabilidad verificable”. |
+| 0:15–0:30 | Landing de SATY | “SATY conecta imágenes públicas Sentinel-2, análisis NDWI y una capa de trazabilidad verificable”. |
 | 0:30–0:55 | Importación GeoJSON y panel de análisis | Mostrar un GeoJSON de prueba validado, iniciar el análisis y esperar el estado terminal. Identificar el AOI como exploratorio si no tiene validación oficial. |
 | 0:55–1:15 | Tabla de resultados y fotogramas | Mostrar fecha, NDWI, escena e incidencias. Explicar que los huecos de datos se conservan y no se rellenan. |
 | 1:15–1:35 | Código/procedencia y contrato Fuji | Mostrar dirección del contrato y explicar el hash. No decir que la serie está on-chain si no se ha publicado. |

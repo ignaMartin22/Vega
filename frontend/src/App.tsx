@@ -15,7 +15,7 @@ function LandingIntro() {
   return (
     <>
       <header className="site-header">
-        <a className="brand-lockup" href="#inicio" aria-label="Vega, inicio"><Mark /><span><strong>VEGA</strong><small>AGUA · CIENCIA · TERRITORIO</small></span></a>
+        <a className="brand-lockup" href="#inicio" aria-label="SATY, inicio"><Mark /><span><strong>SATY</strong><small>AGUA · CIENCIA · TERRITORIO</small></span></a>
         <nav className="main-nav" aria-label="Navegación principal">
           <a href="#plataforma">Plataforma</a><a href="#metodo">Cómo funciona</a><a href="#piloto">Área piloto</a>
         </nav>
@@ -42,7 +42,7 @@ function LandingIntro() {
 
         <section className="intro-strip" id="plataforma">
           <p className="eyebrow">UNA NUEVA MIRADA AL TERRITORIO</p>
-          <p className="intro-statement">Los humedales de altura son ecosistemas esenciales. <strong>Vega transforma observaciones satelitales en información ambiental trazable</strong> para acompañar su estudio y seguimiento.</p>
+          <p className="intro-statement">Los humedales de altura son ecosistemas esenciales. <strong>SATY transforma observaciones satelitales en información ambiental trazable</strong> para acompañar su estudio y seguimiento.</p>
         </section>
 
         <section className="feature-section">
@@ -64,11 +64,11 @@ function LandingIntro() {
         </section>
 
         <section className="pilot-section" id="piloto">
-          <div className="pilot-copy"><p className="eyebrow">03 — TERRITORIO PILOTO</p><h2>Una plataforma<br/>para muchos salares.</h2><p>Vega está pensada para ampliar el monitoreo a distintos humedales y salares de la Puna. Cada área requiere geometrías de origen conocido y validación territorial.</p><a href="#workspace" className="text-link">Probar con un área propia <span>↗</span></a></div>
+          <div className="pilot-copy"><p className="eyebrow">03 — TERRITORIO PILOTO</p><h2>Una plataforma<br/>para muchos salares.</h2><p>SATY está pensada para ampliar el monitoreo a distintos humedales y salares de la Puna. Cada área requiere geometrías de origen conocido y validación territorial.</p><a href="#workspace" className="text-link">Probar con un área propia <span>↗</span></a></div>
           <div className="pilot-visual"><div className="pilot-contour contour-a"/><div className="pilot-contour contour-b"/><div className="pilot-contour contour-c"/><div className="pilot-label"><span className="live-dot"/> PUNA ARGENTINA</div><div className="pilot-coord">GEOGRAFÍA VIVA<br/><strong>ANDES · 3.500 m+</strong></div></div>
         </section>
 
-        <section className="workspace-intro" id="workspace"><div><p className="eyebrow">ENTORNO INTERACTIVO</p><h2>Explorá Vega</h2><p>Importá un GeoJSON y comenzá un análisis. El procesamiento requiere que el servicio local o remoto esté disponible.</p></div><span className="workspace-status">ACCESO A LA PLATAFORMA <b>↓</b></span></section>
+        <section className="workspace-intro" id="workspace"><div><p className="eyebrow">ENTORNO INTERACTIVO</p><h2>Explorá SATY</h2><p>Importá un GeoJSON y comenzá un análisis. El procesamiento requiere que el servicio local o remoto esté disponible.</p></div><span className="workspace-status">ACCESO A LA PLATAFORMA <b>↓</b></span></section>
       </div>
     </>
   );
@@ -128,7 +128,7 @@ export default function App() {
           {usingUploadedGeoJson ? <div className="empty-series"><strong>Área importada</strong><p>La vista previa no reutiliza mediciones mock ni registros on-chain de otras geometrías. Consultá los resultados del trabajo de análisis en el panel superior.</p></div> : <><NdwiChart series={series} threshold={wetland?.properties.thresholdNdwi ?? 0}/>{last && <VerifyButton measurement={last} />}{!last && <p className="empty-series">No hay mediciones disponibles para esta área en la fuente seleccionada.</p>}</>}
         </section>
       </main>
-      <footer className="site-footer"><a className="footer-brand" href="#inicio">VEGA</a><span>Monitoreo ambiental · Puna argentina</span><span>Evidencia ambiental trazable · Resultados sujetos a validación científica.</span><a href="#inicio">Volver arriba ↑</a></footer>
+      <footer className="site-footer"><a className="footer-brand" href="#inicio">SATY</a><span>Monitoreo ambiental · Puna argentina</span><span>Evidencia ambiental trazable · Resultados sujetos a validación científica.</span><a href="#inicio">Volver arriba ↑</a></footer>
     </>
   );
 }
