@@ -66,6 +66,8 @@ Los registros CLI históricos v1 no incluyen el hash de la geometría dentro del
 
 **NDWI es un indicador espectral, no volumen de agua ni prueba de contaminación o causa minera.** Las sales, vegetación, turbidez, hielo, estacionalidad y proporción de píxeles válidos afectan la interpretación. `eo:cloud_cover` corresponde a la tesela, no al AOI. Comparar también `validPixels` y `validFraction` entre fechas: aun con el mínimo del 50%, las medias pueden representar distintas partes del área.
 
+**El NDWI de McFeeters mide agua libre en superficie y no alcanza en todos los casos.** Sirve para lagunas; en vegas y humedales con vegetación da valores negativos aunque estén sanos, y no ve agua subterránea, nivel de salmuera ni volumen. El servicio calcula solo NDWI: los índices de vegetación (por ejemplo NDMI con B08/B11) quedan fuera del MVP. Ver "Alcance del NDWI" en el README raíz.
+
 Los umbrales 1500/1000/1200 se mantienen para compatibilidad con el deploy del equipo. **Son provisionales y no son umbrales ecológicos calibrados**. La vega vegetada puede presentar NDWI negativo sin implicar una degradación. No ajustar umbrales para fabricar un evento ambiental; acordar su interpretación con I1/I3 antes de la demo.
 
 La inspección visual de AOI se realizó contra Sentinel-2. La comparación numérica de 2-3 fechas con Copernicus Browser y la validación experta de límites/umbrales siguen siendo controles externos pendientes.

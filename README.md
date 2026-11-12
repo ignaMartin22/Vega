@@ -126,6 +126,17 @@ Punto de partida: el contrato de ejemplo `ThresholdAlert` de la guía del track.
 1. L1 propia de Avalanche con validadores multiparte.
 2. Varios relayers con mediana o quórum, o Chainlink Functions.
 3. Más salares, Landsat para series largas, sensores en campo y reportes para auditorías.
+4. Índices para vegas con vegetación (por ejemplo NDMI = (B08 − B11) / (B08 + B11) o NDVI). El MVP calcula solo NDWI.
+
+### Alcance del NDWI: cuándo no alcanza
+
+El NDWI que usa el MVP, (B03 − B08) / (B03 + B08) según McFeeters, mide **agua libre en superficie**. Sirve para lagunas y espejos de agua, pero hay casos en los que no alcanza:
+
+- **Vegas y humedales con vegetación:** la vegetación da NDWI negativo aunque la vega esté sana (es el caso del AOI 3 del piloto). Un valor bajo, o el cruce de un umbral, **no indica degradación** en esas áreas.
+- **Agua subterránea, nivel de salmuera y volumen:** el índice no los ve. Las vegas de borde de salar dependen del agua subterránea, que se mide con piezómetros y caudales, no con este índice.
+- **Causa:** un cambio de NDWI puede venir de la estación, años secos, sales, hielo o turbidez. El índice no prueba la causa ni atribuye responsabilidades.
+
+Por qué importa: el daño a una vega puede ser real y verificable. En el Salar del Hombre Muerto, la Corte de Justicia de Catamarca (sentencia del 13/03/2024) tuvo por constatado, según un informe de la Dirección Provincial de Gestión Ambiental Minera del 30/09/2021, que la vega del río Trapiche se secó por la captación de agua para la actividad minera. Para seguir vegas como esa hace falta un índice de vegetación, que queda **fuera del MVP**.
 
 ---
 
