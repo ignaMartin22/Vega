@@ -128,6 +128,7 @@ npm run dry -w @vega/relayer
 ## 8. Límites de comunicación
 
 - NDWI es un indicador espectral; no mide directamente volumen de agua ni prueba contaminación o causalidad minera.
+- El NDWI del MVP (B03/B08) mide agua libre en superficie: sirve para lagunas, pero **no alcanza para vegas con vegetación**, que dan valores negativos aunque estén sanas, ni para agua subterránea o nivel de salmuera. En esas áreas un cruce de umbral no indica degradación. Los índices de vegetación (NDMI, NDVI) quedan fuera del MVP; ver "Alcance del NDWI" en el README.
 - Una coincidencia de hash prueba integridad del registro respecto de los campos hasheados; no certifica por sí sola la calidad de la escena ni la verdad de la interpretación.
 - Un polígono GeoJSON aceptado por el software no es automáticamente un límite oficial.
 - No presentar datos mock, umbrales placeholder o AOI no validados como resultados ambientales confirmados.
