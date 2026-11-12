@@ -29,12 +29,12 @@ En la Puna (Salta, Jujuy, Catamarca), la minería de litio y las comunidades com
 2. **Revisamos y preparamos.** Cada observación conserva escena, fecha, cobertura, método y hash. Las geometrías y los umbrales requieren validación antes de publicar.
 3. **Publicamos y verificamos.** Un relayer autorizado puede registrar mediciones aprobadas en Avalanche. El contrato emite **WaterAlert** únicamente si existe un umbral configurado y la medición queda por debajo. El frontend permite contrastar el registro off-chain con la cadena.
 
-### Estado operativo del MVP · 11/11/2026
+### Estado operativo del MVP · 12/11/2026
 
 - El contrato VegaRegistry está desplegado en Avalanche Fuji.
 - El backend incorpora un catálogo regional de 135 salares/salinas y 506 cuerpos de agua cartografiados de las capas documentadas; no es un inventario ecológico exhaustivo.
 - El motor Sentinel-2 compone teselas de una misma adquisición y procesa Polygon/MultiPolygon. La importación GeoJSON de la interfaz web tiene validaciones más restrictivas que la API.
-- La serie de 105 registros del piloto Hombre Muerto es experimental. No hay evidencia versionada de que esa serie esté publicada en Fuji; no afirmar que ya está sellada.
+- La serie de 105 registros del piloto Hombre Muerto es experimental. I3 incorporó en su rama artefactos con 105 `txHash`, pero todavía falta contrastarlos con recibos exitosos, eventos `MeasurementRecorded` y `getMeasurements` en Fuji. La publicación se considera declarada, no verificada; consultar [auditoría de publicación](docs/CHAIN_PUBLICATION_AUDIT.md).
 - La interfaz inicia en modo mock si no se configura la fuente chain. No hay un despliegue público confirmado y el backend debe desplegarse por separado.
 
 Para operar localmente y conocer los límites, consultar [estado integral](docs/PROJECT_STATUS.md), [API de procesamiento](processing/API.md) y [entrega del frontend](docs/FRONTEND_HANDOFF.md).
