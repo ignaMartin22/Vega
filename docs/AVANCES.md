@@ -13,7 +13,7 @@ Registro de lo terminado y de lo que cada integrante puede hacer a partir de eso
 |---|---|
 | I1 · Contrato | `VegaRegistry` desplegado y verificado en Fuji (`0xBeD76C9B117eC31022aE7f07B0982545C16D1DD5`), umbrales 1→1500, 2→1000, 3→1200, wallet de I3 autorizada como publisher. 16 tests. |
 | I2 · Datos | 105 mediciones reales 2023-2025 de 3 AOI de Hombre Muerto (`sample-data/measurements.json`). API de análisis con catálogo regional (135 salares, 506 cuerpos de agua), Polygon/MultiPolygon, mosaicos de teselas. 16 tests. |
-| I3 · Relayer | Publica con validación de hash, deduplicación, reintentos, `--only-wetland`/`--limit` y genera `records.json`. 6 tests. |
+| I3 · Relayer | Implementa validación de hash, deduplicación, reintentos y generación de artefactos. I3 añadió 105 txHash a su rama; publicación on-chain pendiente de verificación independiente. 6 tests. |
 | I4 · Frontend | Landing, mapa, gráfico NDWI, botón Verificar, panel de análisis GeoJSON. Build OK, 4 tests. |
 | Pitch | Guion por slide en `docs/PITCH.md`; guion de demo en `docs/PITCH_DEMO.md`. |
 
